@@ -13,9 +13,11 @@ Type@0s "./build/minigun"
 Enter
 Sleep 1s
 
+Type "jjjjjjjjjj"
+Sleep 500ms
 Type "lllllllllll"
 Sleep 500ms
-Type "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"
+Type@100ms ":random command   "
 Sleep 500ms
-Type "kkkkkkkkkk"
-Sleep 500ms
+Enter
+Sleep 200ms

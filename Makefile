@@ -4,5 +4,5 @@ build:
 run: build
 	./build/minigun
 
-vhs:
+vhs: build
 	vhs ./demo/base.tape

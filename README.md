@@ -4,21 +4,27 @@ Just a fun project. `Minigun` because it _supposted_ to be fast, not sure if it 
 
 It's not usable at the moment, but I hope it will be one day...
 
-## Random preview
-
-![Demo gif](./demo/base.gif)
-
 ## WIP
 
-In the order of implementation / importance
+Implementation order is "when needed"
 
-- [x] `hjkl` movements
-- [ ] Some kind of a command console (`:` from vim)
+- [ ] Debug info
+  - [ ] `.log` file
+  - [ ] Some on-screen output
+- [ ] Modes
+  - [ ] View
+    - [x] `hjkl` movements
+  - [ ] Insert Mode
+    - [ ] `i`, `I`, `a`, `A` will do for now
+  - [ ] Command Mode (`:` from vim)
+    - [x] Basic input
+    - [ ] Command handling
+- [ ] Status bar
+  - [x] Current Mode
+  - [ ] Cursor Line / Position
 - [ ] Opening files
   - [ ] File / Project tree
 - [ ] Keybinds
-- [ ] Insert Mode
-  - [ ] `i`, `I`, `a`, `A` will do for now
 - [ ] Saving file
 - [ ] Config options
   - [ ] Global / per project config
@@ -26,5 +32,10 @@ In the order of implementation / importance
   - [ ] Line Numbers
 - [ ] Multiple windows / tabs
 - [ ] Tree sitter
-- [ ] LSP
+- [ ] LSP (multiple for the same lang)
+- [ ] Formatters
 - [ ] Plugins (ideally no lua)
+
+## Preview
+
+![](./demo/base.gif)

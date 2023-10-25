@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"math"
 	"os"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/ravsii/minigun/statusbar"
 )
 
 type Mode int
@@ -17,27 +19,41 @@ const (
 )
 
 type Tab struct {
-	Lines  []string
-	Cursor Cursor
+	s       tcell.Screen
+	Lines   []string
+	Cursor  Cursor
+	w       int
+	h       int
+	xOffset int
+	yOffset int
+	sb      *statusbar.StatusBar
+
+	parent *Group
 }
 
-type Cursor struct {
-	Line     int
-	Position int
-	// prevPosition is used to keep horizontal positing when moving up and down
-	// between the lines of different width.
-	prevPosition int
+func newTab(s tcell.Screen, w, h, xOffset, yOffset int, parent *Group) *Tab {
+	sb := statusbar.New(s)
+
+	return &Tab{
+		s:       s,
+		w:       w,
+		h:       h,
+		xOffset: xOffset,
+		yOffset: yOffset,
+		sb:      sb,
+		parent:  parent,
+	}
 }
 
-func FromPath(path string) (*Tab, error) {
+func (t *Tab) FromPath(path string) error {
 	f, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	b, err := io.ReadAll(f)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	lineBytes := bytes.Split(b, []byte("\n"))
@@ -46,32 +62,32 @@ func FromPath(path string) (*Tab, error) {
 		lines[i] = string(lineBytes[i])
 	}
 
-	return &Tab{
-		Lines: lines,
-		Cursor: Cursor{
-			Line:     0,
-			Position: 0,
-		},
-	}, nil
+	t.Lines = lines
+	return nil
 }
 
-func (t *Tab) Draw(s tcell.Screen) {
-	xx, yy := s.Size()
+func (t *Tab) Draw() {
+	xx, yy := t.w, t.h
 
 	// todo: this needs to be refactored
 
-	half := yy / 2
+	half := int(math.Ceil(float64(yy) / 2))
 	end := max(t.Cursor.Line+half, yy)
 	lmh := t.Cursor.Line - half
 	start := max(lmh, 0)
+
+	// we can't scroll more than the amount of line in the file
 	if end+half > len(t.Lines) {
 		end = len(t.Lines)
 	}
+
+	// at the enf of the file, start should be equals to
+	// last line number - term height
 	if start > len(t.Lines)/2 && start > end-yy {
 		start = end - yy
 	}
+
 	activeLine := t.Cursor.Line - start
-	// fmt.Println(start)
 
 	for y, line := range t.Lines[start:end] {
 		lineStr := make([]rune, 3)
@@ -80,7 +96,7 @@ func (t *Tab) Draw(s tcell.Screen) {
 			lineStr[i] = r
 		}
 		for i, r := range lineStr {
-			s.SetContent(i, y, r, nil, lineNumberStyle)
+			t.s.SetContent(i, y, r, nil, lineNumberStyle)
 		}
 
 		// TODO: fix no cursor on empty line
@@ -89,7 +105,8 @@ func (t *Tab) Draw(s tcell.Screen) {
 			style := tcell.StyleDefault
 			if activeLine == y {
 				if t.Cursor.Position == x {
-					style = cursorStyleCell
+					// style = cursorStyleCell
+					t.s.ShowCursor(x, y)
 				} else {
 					style = cursorStyle
 				}
@@ -97,24 +114,29 @@ func (t *Tab) Draw(s tcell.Screen) {
 
 			switch c {
 			case '\n':
-				s.SetContent(x+3, y, c, nil, cursorStyle)
+				t.s.SetContent(x+3, y, c, nil, cursorStyle)
 			default:
-				s.SetContent(x+3, y, c, nil, style)
+				t.s.SetContent(x+3, y, c, nil, style)
 			}
+		}
 
+		if len(line) == 1 {
+			t.s.SetContent(5, y, 'a', nil, cursorStyleCell)
 		}
 
 		if activeLine == y && xx > len(line) {
 			for x := len(line); x < xx; x++ {
-				s.SetContent(x+3, y, ' ', nil, cursorStyle)
+				t.s.SetContent(x+3, y, ' ', nil, cursorStyle)
 			}
 		} else {
 			for x := len(line); x < xx; x++ {
-				s.SetContent(x+3, y, ' ', nil, tcell.StyleDefault)
+				t.s.SetContent(x+3, y, ' ', nil, tcell.StyleDefault)
 			}
 
 		}
 	}
+
+	t.sb.Draw(t.yOffset+t.h, t.w)
 }
 
 // HandleKey handles key event. It returns true if a user desires to quit the app.
@@ -137,6 +159,10 @@ func (t *Tab) HandleKey(s tcell.Screen, key *tcell.EventKey) bool {
 	}
 
 	return false
+}
+
+func (t *Tab) StatusBar() *statusbar.StatusBar {
+	return t.sb
 }
 
 func (t *Tab) MoveUp() {
