@@ -6,10 +6,10 @@ var rootGroup Group
 
 // this will be used later to handle split views
 type Group struct {
+	s         tcell.Screen
 	activeTab *Tab
 	w         int
 	h         int
-	s         tcell.Screen
 }
 
 func NewRootGroup(s tcell.Screen, w, h int) *Group {

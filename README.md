@@ -12,20 +12,23 @@ Implementation order is "when needed"
   - [ ] `.log` file
   - [ ] Some on-screen output
 - [ ] Modes
-  - [ ] View
+  - [x] View
     - [x] `hjkl` movements
   - [ ] Insert Mode
     - [ ] `i`, `I`, `a`, `A` will do for now
   - [ ] Command Mode (`:` from vim)
     - [x] Basic input
-    - [ ] Command handling
+    - [x] Command handling
+      - [x] ~~You can `:q`, do you need anything else?~~
+    - [ ] Errors
 - [ ] Status bar
   - [x] Current Mode
   - [ ] Cursor Line / Position
-- [ ] Opening files
-  - [ ] File / Project tree
+- [ ] Commands
+  - [ ] Opening files
+  - [ ] Saving file
+- [ ] File / Project tree
 - [ ] Keybinds
-- [ ] Saving file
 - [ ] Config options
   - [ ] Global / per project config
   - [ ] Tab size

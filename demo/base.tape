@@ -17,7 +17,12 @@ Type "jjjjjjjjjj"
 Sleep 500ms
 Type "lllllllllll"
 Sleep 500ms
-Type@100ms ":random command   "
+Type@100ms ":random coooommand"
+Left@100ms 4
+Backspace@100ms 4
 Sleep 500ms
 Enter
 Sleep 200ms
+Type@100ms ":q"
+Sleep 500ms
+Enter

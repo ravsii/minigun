@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/command"
+	"github.com/ravsii/minigun/cmdline"
 	"github.com/ravsii/minigun/tab"
 )
 
@@ -29,12 +29,12 @@ func main() {
 		log.Fatalf("%+v", err)
 	}
 
-	cmdLine := command.New(s)
+	commandLine := cmdline.New(s)
 
 	for {
 		t := root.ActiveTab()
 		t.Draw()
-		cmdLine.Draw()
+		commandLine.Draw()
 
 		// Update screen
 		s.Show()
@@ -45,7 +45,7 @@ func main() {
 			s.Sync()
 		case *tcell.EventKey:
 			if event.Rune() == ':' {
-				cmdLine.HandleInput()
+				commandLine.HandleInput()
 				continue
 			}
 

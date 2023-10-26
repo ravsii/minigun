@@ -19,14 +19,17 @@ const (
 )
 
 type Tab struct {
-	s       tcell.Screen
-	Lines   []string
-	Cursor  Cursor
+	s tcell.Screen
+
+	Lines  []string
+	Cursor Cursor
+
 	w       int
 	h       int
 	xOffset int
 	yOffset int
-	sb      *statusbar.StatusBar
+
+	sb *statusbar.StatusBar
 
 	parent *Group
 }
@@ -87,7 +90,7 @@ func (t *Tab) Draw() {
 		start = end - yy
 	}
 
-	activeLine := t.Cursor.Line - start
+	cursorLine := t.Cursor.Line - start
 
 	for y, line := range t.Lines[start:end] {
 		lineStr := make([]rune, 3)
@@ -103,13 +106,9 @@ func (t *Tab) Draw() {
 
 		for x, c := range line {
 			style := tcell.StyleDefault
-			if activeLine == y {
-				if t.Cursor.Position == x {
-					// style = cursorStyleCell
-					t.s.ShowCursor(x, y)
-				} else {
-					style = cursorStyle
-				}
+			if cursorLine == y && t.Cursor.Position == x {
+				t.s.ShowCursor(x+3, y)
+				style = cursorStyle
 			}
 
 			switch c {
@@ -120,11 +119,11 @@ func (t *Tab) Draw() {
 			}
 		}
 
-		if len(line) == 1 {
-			t.s.SetContent(5, y, 'a', nil, cursorStyleCell)
+		if len(line) == 1 && cursorLine == y {
+			t.s.ShowCursor(3, y)
 		}
 
-		if activeLine == y && xx > len(line) {
+		if cursorLine == y && xx > len(line) {
 			for x := len(line); x < xx; x++ {
 				t.s.SetContent(x+3, y, ' ', nil, cursorStyle)
 			}
