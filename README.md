@@ -20,7 +20,7 @@ Implementation order is "when needed"
     - [x] Basic input
     - [x] Command handling
       - [x] ~~You can `:q`, do you need anything else?~~
-    - [ ] Errors
+    - [x] Errors
 - [ ] Status bar
   - [x] Current Mode
   - [ ] Cursor Line / Position

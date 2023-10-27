@@ -22,7 +22,7 @@ Left@100ms 4
 Backspace@100ms 4
 Sleep 500ms
 Enter
-Sleep 200ms
+Sleep 1s
 Type@100ms ":q"
 Sleep 500ms
 Enter

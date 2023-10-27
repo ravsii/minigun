@@ -60,9 +60,9 @@ func (c *Command) HandleInput() {
 	c.s.SetCursorStyle(tcell.CursorStyleBlinkingBar)
 	defer func() {
 		mode.Set(mode.View)
-		statusbar.Get().Draw()
 		c.s.SetCursorStyle(tcell.CursorStyleBlinkingBlock)
 		c.s.HideCursor()
+		statusbar.Get().Draw()
 	}()
 
 	userCommand := c.handleInputString()

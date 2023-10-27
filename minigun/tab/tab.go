@@ -8,6 +8,8 @@ import (
 	"os"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/ravsii/minigun/minigun/cursor"
+	"github.com/ravsii/minigun/minigun/statusbar"
 )
 
 type Mode int
@@ -21,7 +23,7 @@ type Tab struct {
 	s tcell.Screen
 
 	Lines  []string
-	Cursor Cursor
+	Cursor cursor.Cursor
 
 	w       int
 	h       int
@@ -30,13 +32,17 @@ type Tab struct {
 }
 
 func New(s tcell.Screen, w, h, xOffset, yOffset int) *Tab {
-	return &Tab{
+	t := &Tab{
 		s:       s,
 		w:       w,
 		h:       h,
 		xOffset: xOffset,
 		yOffset: yOffset,
 	}
+
+	statusbar.Get().SetCursor(&t.Cursor)
+
+	return t
 }
 
 func (t *Tab) FromPath(path string) error {
@@ -131,6 +137,7 @@ func (t *Tab) Draw() {
 	}
 
 	t.s.Show()
+	statusbar.Get().Draw()
 }
 
 // HandleKey handles key event. It returns true if a user desires to quit the app.
@@ -161,8 +168,8 @@ func (t *Tab) MoveUp() {
 	newLine := t.Lines[t.Cursor.Line-1]
 	lnl := len(newLine) - 1
 
-	if t.Cursor.prevPosition <= lnl {
-		t.Cursor.Position = t.Cursor.prevPosition
+	if t.Cursor.PrevPosition <= lnl {
+		t.Cursor.Position = t.Cursor.PrevPosition
 	} else {
 		t.Cursor.Position = max(lnl, 0)
 	}
@@ -178,8 +185,8 @@ func (t *Tab) MoveDown() {
 	newLine := t.Lines[t.Cursor.Line+1]
 	lnl := len(newLine) - 1
 
-	if t.Cursor.prevPosition <= lnl {
-		t.Cursor.Position = t.Cursor.prevPosition
+	if t.Cursor.PrevPosition <= lnl {
+		t.Cursor.Position = t.Cursor.PrevPosition
 	} else {
 		t.Cursor.Position = max(lnl, 0)
 	}
@@ -192,7 +199,7 @@ func (t *Tab) MoveLeft() {
 		return
 	}
 	t.Cursor.Position--
-	t.Cursor.prevPosition = t.Cursor.Position
+	t.Cursor.PrevPosition = t.Cursor.Position
 }
 
 func (t *Tab) MoveRight() {
@@ -201,5 +208,5 @@ func (t *Tab) MoveRight() {
 		return
 	}
 	t.Cursor.Position++
-	t.Cursor.prevPosition = t.Cursor.Position
+	t.Cursor.PrevPosition = t.Cursor.Position
 }
