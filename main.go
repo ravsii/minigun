@@ -4,56 +4,25 @@ import (
 	"log"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/cmdline"
-	"github.com/ravsii/minigun/tab"
+	"github.com/ravsii/minigun/minigun"
 )
 
 func main() {
-
-	// Initialize screen
 	s, err := tcell.NewScreen()
 	if err != nil {
 		log.Fatalf("%+v", err)
 	}
+
 	defer gracefulShotdown(s)
+
 	if err := s.Init(); err != nil {
 		log.Fatalf("%+v", err)
 	}
+
 	s.Clear()
 
-	w, h := s.Size()
-
-	root := tab.NewRootGroup(s, w, h-1)
-	root.NewTab()
-	if err := root.ActiveTab().FromPath("./main.go"); err != nil {
-		log.Fatalf("%+v", err)
-	}
-
-	commandLine := cmdline.New(s)
-
-	for {
-		t := root.ActiveTab()
-		t.Draw()
-		commandLine.Draw()
-
-		// Update screen
-		s.Show()
-
-		// Process event
-		switch event := s.PollEvent().(type) {
-		case *tcell.EventResize:
-			s.Sync()
-		case *tcell.EventKey:
-			if event.Rune() == ':' {
-				commandLine.HandleInput()
-				continue
-			}
-
-			if t.HandleKey(s, event) {
-				return
-			}
-		}
-	}
+	mg := minigun.New(s)
+	mg.Run()
 }
 
 func gracefulShotdown(s tcell.Screen) {

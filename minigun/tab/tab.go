@@ -8,7 +8,6 @@ import (
 	"os"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/statusbar"
 )
 
 type Mode int
@@ -28,23 +27,15 @@ type Tab struct {
 	h       int
 	xOffset int
 	yOffset int
-
-	sb *statusbar.StatusBar
-
-	parent *Group
 }
 
-func newTab(s tcell.Screen, w, h, xOffset, yOffset int, parent *Group) *Tab {
-	sb := statusbar.New(s)
-
+func New(s tcell.Screen, w, h, xOffset, yOffset int) *Tab {
 	return &Tab{
 		s:       s,
 		w:       w,
 		h:       h,
 		xOffset: xOffset,
 		yOffset: yOffset,
-		sb:      sb,
-		parent:  parent,
 	}
 }
 
@@ -93,6 +84,10 @@ func (t *Tab) Draw() {
 	cursorLine := t.Cursor.Line - start
 
 	for y, line := range t.Lines[start:end] {
+		if y >= t.h {
+			break
+		}
+
 		lineStr := make([]rune, 3)
 		st := fmt.Sprint(start + y + 1)
 		for i, r := range st {
@@ -135,16 +130,12 @@ func (t *Tab) Draw() {
 		}
 	}
 
-	t.sb.Draw(t.yOffset+t.h, t.w)
+	t.s.Show()
 }
 
 // HandleKey handles key event. It returns true if a user desires to quit the app.
 func (t *Tab) HandleKey(s tcell.Screen, key *tcell.EventKey) bool {
 	switch {
-	case key.Key() == tcell.KeyCtrlC:
-		return true
-	case key.Key() == tcell.KeyCtrlL:
-		s.Sync()
 	case key.Rune() == 'C' || key.Rune() == 'c':
 		s.Clear()
 	case key.Rune() == 'H' || key.Rune() == 'h':
@@ -157,11 +148,9 @@ func (t *Tab) HandleKey(s tcell.Screen, key *tcell.EventKey) bool {
 		t.MoveRight()
 	}
 
-	return false
-}
+	t.Draw()
 
-func (t *Tab) StatusBar() *statusbar.StatusBar {
-	return t.sb
+	return false
 }
 
 func (t *Tab) MoveUp() {

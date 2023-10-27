@@ -1,4 +1,4 @@
-package commands
+package cmd
 
 import (
 	"os"
@@ -25,6 +25,7 @@ func Execute(args ...string) {
 	cmdName := strings.ToLower(args[0])
 	cmd, ok := commands[cmdName]
 	if !ok {
+		Errorf("unknown command: %s", cmdName)
 		return
 	}
 

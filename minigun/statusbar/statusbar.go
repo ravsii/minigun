@@ -2,22 +2,38 @@ package statusbar
 
 import (
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/mode"
+	"github.com/ravsii/minigun/minigun/mode"
 )
 
-var statusBg = tcell.StyleDefault.Background(tcell.ColorGold)
+var (
+	statusBg  = tcell.StyleDefault.Background(tcell.ColorGold)
+	statusBar *StatusBar
+)
 
 type StatusBar struct {
 	s tcell.Screen
 }
 
-func New(s tcell.Screen) *StatusBar {
-	return &StatusBar{
-		s: s,
+func Init(s tcell.Screen) *StatusBar {
+	if statusBar == nil {
+		statusBar = &StatusBar{s: s}
 	}
+
+	return statusBar
 }
 
-func (s *StatusBar) Draw(y int, w int) {
+// Get returns an instance of a Command struct.
+func Get() *StatusBar {
+	if statusBar == nil {
+		panic("Init() is not called")
+	}
+
+	return statusBar
+}
+func (s *StatusBar) Draw() {
+	w, h := s.s.Size()
+	y := h - 2
+
 	modeStr := mode.String()
 	modeColor := mode.Color()
 
