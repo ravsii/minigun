@@ -1,4 +1,4 @@
-package cursor
+package tab
 
 type Cursor struct {
 	Line     int

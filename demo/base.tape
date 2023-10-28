@@ -13,6 +13,8 @@ Type@0s "./build/minigun"
 Enter
 Sleep 1s
 
+Type@100ms ":open README.md"
+Enter
 Type "jjjjjjjjjj"
 Sleep 500ms
 Type "lllllllllll"
@@ -20,9 +22,9 @@ Sleep 500ms
 Type@100ms ":random coooommand"
 Left@100ms 4
 Backspace@100ms 4
-Sleep 500ms
+Sleep 1s
 Enter
 Sleep 1s
 Type@100ms ":q"
-Sleep 500ms
+Sleep 1s
 Enter

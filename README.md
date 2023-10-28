@@ -10,29 +10,36 @@ Implementation order is "when needed"
 
 - [ ] Debug info
   - [ ] `.log` file
-  - [ ] Some on-screen output
+  - [x] Some on-screen output (Command mode)
+    - [x] Error messages
+    - [x] Info messages
 - [ ] Modes
   - [x] View
     - [x] `hjkl` movements
   - [ ] Insert Mode
     - [ ] `i`, `I`, `a`, `A` will do for now
-  - [ ] Command Mode (`:` from vim)
+  - [x] Command Mode (`:` from vim)
     - [x] Basic input
     - [x] Command handling
       - [x] ~~You can `:q`, do you need anything else?~~
-    - [x] Errors
-- [ ] Status bar
+- [x] Status bar
   - [x] Current Mode
-  - [ ] Cursor Line / Position
+  - [x] Cursor Line / Position
 - [ ] Commands
-  - [ ] Opening files
+  - [x] Make all integrations with the minigun via commands, no hardcoded actions
+  - [x] Opening files (`:o`, `:open`)
   - [ ] Saving file
+- [ ] UI Library - We need some kind of a UI components library, because rn everything is hardcoded so its not good.
+  - [ ] Must Have
+    - [ ] Padding
+    - [ ] Margin
 - [ ] File / Project tree
-- [ ] Keybinds
 - [ ] Config options
   - [ ] Global / per project config
   - [ ] Tab size
   - [ ] Line Numbers
+  - [x] Keybinds
+    - Technically all input is getting handled by the keybinds already, I just need to move them into config
 - [ ] Multiple windows / tabs
 - [ ] Tree sitter
 - [ ] LSP (multiple for the same lang)

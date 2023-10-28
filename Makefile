@@ -1,6 +1,6 @@
 .PHONY: build
 build:
-	go build -o ./build/minigun .
+	go build -o ./build/minigun ./cmd/minigun/*
 
 run: build
 	./build/minigun

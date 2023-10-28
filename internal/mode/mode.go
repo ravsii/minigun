@@ -1,7 +1,5 @@
 package mode
 
-import "github.com/gdamore/tcell/v2"
-
 type Mode int
 
 const (
@@ -12,11 +10,6 @@ const (
 var modeString = map[Mode]string{
 	View:    "View",
 	Console: "Console",
-}
-
-var modeColor = map[Mode]tcell.Color{
-	View:    tcell.NewHexColor(0xFF0000),
-	Console: tcell.NewHexColor(0x00FF00),
 }
 
 var current = View
@@ -31,8 +24,4 @@ func Current() Mode {
 
 func String() string {
 	return modeString[current]
-}
-
-func Color() tcell.Color {
-	return modeColor[current]
 }

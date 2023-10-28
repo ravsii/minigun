@@ -1,86 +1,43 @@
-package cmd
+package cmdline
 
 import (
-	"strings"
 	"unicode"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/minigun/mode"
-	"github.com/ravsii/minigun/minigun/statusbar"
-)
-
-const (
-	block     = '█'
-	bar       = '|'
-	underline = '_'
+	"github.com/ravsii/minigun/internal/component"
+	"github.com/ravsii/minigun/internal/screen"
 )
 
 var (
-	command     *Command
 	cursorInput = tcell.StyleDefault.Underline(true)
 )
 
-type Command struct {
-	s tcell.Screen
+var _ component.Component = (*CommandLine)(nil)
 
-	errMsg string
+type CommandLine struct {
 }
 
-func Init(s tcell.Screen) *Command {
-	if command == nil {
-		command = &Command{s: s}
-	}
-
-	return command
+func New() CommandLine {
+	return CommandLine{}
 }
 
-// Get returns an instance of a Command struct.
-func Get() *Command {
-	if command == nil {
-		panic("Init() is not called")
-	}
-
-	return command
-}
-
-func (c *Command) Draw() {
-	if c.errMsg != "" {
-		return
-	}
+func (c *CommandLine) Draw() {
 	c.DrawInput("", -1)
 }
 
-func (c *Command) DrawInput(input string, cursorAt int) {
+func (c *CommandLine) DrawInput(input string, cursorAt int) {
 	c.printStyled(":"+input, tcell.StyleDefault, cursorAt)
 }
 
-func (c *Command) HandleInput() {
-	mode.Set(mode.Console)
-	statusbar.Get().Draw()
-	c.s.SetCursorStyle(tcell.CursorStyleBlinkingBar)
-	defer func() {
-		mode.Set(mode.View)
-		c.s.SetCursorStyle(tcell.CursorStyleBlinkingBlock)
-		c.s.HideCursor()
-		statusbar.Get().Draw()
-	}()
-
-	userCommand := c.handleInputString()
-	splitted := strings.Split(userCommand, " ")
-	Execute(splitted...)
-}
-
-func (c *Command) handleInputString() string {
+func (c *CommandLine) HandleUserInput() string {
 	input := make([]rune, 0, 20)
 	var cursorPos int
 
-	// todo: this needs to be refactored
-
+inputLoop:
 	for {
 		c.DrawInput(string(input), cursorPos)
-		c.s.Show()
 
-		event, ok := c.s.PollEvent().(*tcell.EventKey)
+		event, ok := screen.Screen().PollEvent().(*tcell.EventKey)
 		if !ok {
 			continue
 		}
@@ -89,7 +46,7 @@ func (c *Command) handleInputString() string {
 		case event.Modifiers() != tcell.ModNone:
 			break
 		case event.Key() == tcell.KeyEnter:
-			return string(input)
+			break inputLoop
 		case event.Key() == tcell.KeyBackspace || event.Key() == tcell.KeyBackspace2:
 			if len(input) == 0 {
 				// vim does quit command mode on empty command & backspace
@@ -126,13 +83,16 @@ func (c *Command) handleInputString() string {
 			cursorPos++
 		}
 	}
+
+	return string(input)
 }
 
 // printStyled prints the given message using the given style.
 // If the cursor is being hidden if the value is negative
-func (c *Command) printStyled(msg string, style tcell.Style, cursorAt int) {
-	_, y := c.s.Size()
+func (c *CommandLine) printStyled(msg string, style tcell.Style, cursorAt int) {
+	_, y := screen.Screen().Size()
 	y--
+	screen.Screen().HideCursor()
 
 	if cursorAt >= 0 {
 		cursorAt++
@@ -142,24 +102,24 @@ func (c *Command) printStyled(msg string, style tcell.Style, cursorAt int) {
 	for _, r := range msg {
 		style := tcell.StyleDefault
 		if x == cursorAt {
-			c.s.ShowCursor(x, y)
+			screen.Screen().ShowCursor(x, y)
 		}
-		c.s.SetContent(x, y, r, nil, style)
+		screen.Screen().SetContent(x, y, r, nil, style)
 
 		x++
 	}
 
 	if x == cursorAt {
-		c.s.SetContent(x, y, ' ', nil, cursorInput)
+		screen.Screen().SetContent(x, y, ' ', nil, cursorInput)
 		x++
 	}
 
 	c.printEmptyFrom(x)
-	c.s.Show()
+	screen.Screen().Show()
 }
 
-func (c *Command) printEmptyFrom(x int) {
-	for w, y := c.s.Size(); x < w; x++ {
-		c.s.SetContent(x, y-1, ' ', nil, tcell.StyleDefault)
+func (c *CommandLine) printEmptyFrom(x int) {
+	for w, y := screen.Screen().Size(); x < w; x++ {
+		screen.Screen().SetContent(x, y-1, ' ', nil, tcell.StyleDefault)
 	}
 }
