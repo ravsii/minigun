@@ -20,8 +20,8 @@ Sleep 500ms
 Type "lllllllllll"
 Sleep 500ms
 Type@100ms ":random coooommand"
-Left@100ms 4
-Backspace@100ms 4
+Left@100ms 5
+Backspace@100ms 3
 Sleep 1s
 Enter
 Sleep 1s

@@ -19,20 +19,20 @@ Implementation order is "when needed"
   - [ ] Insert Mode
     - [ ] `i`, `I`, `a`, `A` will do for now
   - [x] Command Mode (`:` from vim)
-    - [x] Basic input
-    - [x] Command handling
-      - [x] ~~You can `:q`, do you need anything else?~~
+  - [ ] Replace Mode (single char, `r` from vim)
 - [x] Status bar
   - [x] Current Mode
   - [x] Cursor Line / Position
 - [ ] Commands
   - [x] Make all integrations with the minigun via commands, no hardcoded actions
   - [x] Opening files (`:o`, `:open`)
-  - [ ] Saving file
+  - [ ] Saving files
 - [ ] UI Library - We need some kind of a UI components library, because rn everything is hardcoded so its not good.
   - [ ] Must Have
-    - [ ] Padding
+    - [x] Padding
     - [ ] Margin
+    - [ ] Border
+  - [x] Basic boxes
 - [ ] File / Project tree
 - [ ] Config options
   - [ ] Global / per project config
@@ -48,4 +48,4 @@ Implementation order is "when needed"
 
 ## Preview
 
-![](./demo/base.gif)
+![demo gif](./demo/base.gif)
