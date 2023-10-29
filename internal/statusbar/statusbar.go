@@ -42,12 +42,18 @@ func (s *StatusBar) Draw() {
 
 	paddingY2 := component.Padding{Left: 2, Right: 2}
 
-	modeTextBox := textbox.New(0, y, modeStr, box.WithBackground(modeColor), box.WithPadding(paddingY2))
+	modeTextBox := textbox.New(0, y, modeStr,
+		box.WithTextColor(tcell.ColorBlack),
+		box.WithBackground(modeColor),
+		box.WithPadding(paddingY2))
 
 	cursorString := fmt.Sprintf("Line: %d, Col: %d", s.cursorLine, s.cursorPos)
 	lenStr := utf8.RuneCountInString(cursorString)
 	cursorTbX := w - paddingY2.SumX() - lenStr
-	cursorTextBox := textbox.New(cursorTbX, y, cursorString, box.WithBackground(tcell.ColorPurple), box.WithPadding(paddingY2))
+	cursorTextBox := textbox.New(cursorTbX, y, cursorString,
+		box.WithTextColor(tcell.ColorBlack),
+		box.WithBackground(tcell.ColorPurple),
+		box.WithPadding(paddingY2))
 
 	modeTextBox.Draw()
 	cursorTextBox.Draw()

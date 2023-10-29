@@ -42,6 +42,13 @@ func New(w, h, xOffset, yOffset int) *Tab {
 	return t
 }
 
+func (t *Tab) Resize() {
+	w, h := screen.Screen().Size()
+	h -= 2
+	t.w = w
+	t.h = h
+}
+
 func (t *Tab) FromPath(path string) error {
 	f, err := os.Open(path)
 	if err != nil {

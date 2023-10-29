@@ -27,6 +27,8 @@ func main() {
 		switch event := screen.Screen().PollEvent().(type) {
 		case *tcell.EventResize:
 			screen.Screen().Sync()
+			mg.Tab.Resize()
+			mg.Draw()
 		case *tcell.EventKey:
 			kh.Handle(event)
 		}
