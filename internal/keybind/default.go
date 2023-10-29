@@ -1,8 +1,11 @@
 package keybind
 
 import (
+	"strconv"
+
 	"github.com/gdamore/tcell/v2"
 	"github.com/ravsii/minigun/internal/command"
+	"github.com/ravsii/minigun/internal/screen"
 )
 
 type KeybindHandler struct {
@@ -35,4 +38,7 @@ func (h *KeybindHandler) Handle(e tcell.Event) {
 	case key.Rune() == 'L' || key.Rune() == 'l':
 		h.c.MoveRight()
 	}
+
+	h.c.Info("events", strconv.Itoa(screen.Updates))
+	screen.Show()
 }

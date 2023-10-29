@@ -21,6 +21,7 @@ func (h *CommandHandler) MoveLeft(...string) {
 }
 
 func (h *CommandHandler) updateCursorSB() {
-	h.m.StatusBar.SetCursor(h.m.Tab.Cursor().Line, h.m.Tab.Cursor().Position)
+	c := h.m.Tab.Cursor()
+	h.m.StatusBar.SetCursor(c.Line, c.Position)
 	h.m.StatusBar.Draw()
 }

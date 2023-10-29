@@ -36,6 +36,7 @@ func (c *CommandLine) HandleUserInput() string {
 inputLoop:
 	for {
 		c.DrawInput(string(input), cursorPos)
+		screen.Show()
 
 		event, ok := screen.Screen().PollEvent().(*tcell.EventKey)
 		if !ok {
@@ -115,7 +116,6 @@ func (c *CommandLine) printStyled(msg string, style tcell.Style, cursorAt int) {
 	}
 
 	c.printEmptyFrom(x)
-	screen.Screen().Show()
 }
 
 func (c *CommandLine) printEmptyFrom(x int) {

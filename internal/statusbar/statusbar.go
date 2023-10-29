@@ -35,7 +35,7 @@ func (s *StatusBar) Draw() {
 	w, h := screen.Screen().Size()
 	y := h - 2
 
-	screen.FillLine(y, tcell.StyleDefault.Background(tcell.ColorGold))
+	screen.FillLineEmpty(y, tcell.StyleDefault.Background(tcell.ColorGold))
 
 	modeStr := mode.String()
 	modeColor := modeColor[mode.Current()]

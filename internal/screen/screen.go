@@ -9,6 +9,8 @@ const (
 	underline = '_'
 )
 
+var Updates int
+
 var s tcell.Screen
 
 func init() {
@@ -30,6 +32,7 @@ func Screen() tcell.Screen {
 }
 
 func Show() {
+	Updates++
 	s.Show()
 }
 
@@ -49,10 +52,18 @@ func SetRuneStyle(x, y int, r rune, style tcell.Style) {
 	s.SetContent(x, y, r, nil, style)
 }
 
-func FillLine(y int, style tcell.Style) {
+func FillLineEmpty(y int, style tcell.Style) {
 	w, _ := s.Size()
-	for x := 0; x < w; x++ {
-		SetRuneStyle(x, y, ' ', style)
+	FillLineEmptyFromTo(0, w, y, style)
+}
+
+func FillLineEmptyFromTo(fromX, toX, y int, style tcell.Style) {
+	FillLineFromTo(fromX, toX, y, ' ', style)
+}
+
+func FillLineFromTo(fromX, toX, y int, r rune, style tcell.Style) {
+	for x := fromX; x < toX; x++ {
+		SetRuneStyle(x, y, r, style)
 	}
 }
 

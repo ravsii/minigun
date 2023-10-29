@@ -27,3 +27,9 @@ func WithBackground(c tcell.Color) BoxOption {
 		b.bg = c
 	}
 }
+
+func WithBorder(border component.Border) BoxOption {
+	return func(box *Box) {
+		box.border = border
+	}
+}

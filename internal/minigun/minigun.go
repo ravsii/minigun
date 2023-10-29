@@ -32,6 +32,4 @@ func (m *Minigun) Draw() {
 	m.Tab.Draw()
 	m.StatusBar.Draw()
 	m.CommandLine.Draw()
-
-	screen.Screen().Show()
 }

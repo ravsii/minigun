@@ -2,7 +2,6 @@ package tab
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"math"
 	"os"
@@ -73,10 +72,12 @@ func (t *Tab) FromPath(path string) error {
 func (t *Tab) Draw() {
 	xx, yy := t.w, t.h
 
+	// amount of cells we need to store the biggest line number
+	xStart := t.lineNumbersWidth() + 2
+
 	var start, end, cursorLine int
 
 	if len(t.lines) != 0 {
-
 		// todo: this needs to be refactored
 
 		half := int(math.Ceil(float64(yy) / 2))
@@ -100,34 +101,25 @@ func (t *Tab) Draw() {
 		start, end, cursorLine = 0, 0, 0
 	}
 
+	t.drawLineNumbers(start)
+
 	for y, line := range t.lines[start:end] {
 		if y >= t.h {
 			break
 		}
 
-		lineStr := make([]rune, 3)
-		st := fmt.Sprint(start + y + 1)
-		for i, r := range st {
-			lineStr[i] = r
-		}
-		for i, r := range lineStr {
-			screen.Screen().SetContent(i, y, r, nil, lineNumberStyle)
-		}
-
-		// TODO: fix no cursor on empty line
-
 		for x, c := range line {
 			style := tcell.StyleDefault
 			if cursorLine == y && t.cursor.Position == x {
-				screen.Screen().ShowCursor(x+3, y)
+				screen.Screen().ShowCursor(x+xStart, y)
 				style = cursorStyle
 			}
 
 			switch c {
 			case '\n':
-				screen.Screen().SetContent(x+3, y, c, nil, cursorStyle)
+				screen.Screen().SetContent(x+xStart, y, c, nil, cursorStyle)
 			default:
-				screen.Screen().SetContent(x+3, y, c, nil, style)
+				screen.Screen().SetContent(x+xStart, y, c, nil, style)
 			}
 		}
 
@@ -137,17 +129,21 @@ func (t *Tab) Draw() {
 
 		if cursorLine == y && xx > len(line) {
 			for x := len(line); x < xx; x++ {
-				screen.Screen().SetContent(x+3, y, ' ', nil, cursorStyle)
+				screen.Screen().SetContent(x+xStart, y, ' ', nil, cursorStyle)
 			}
 		} else {
 			for x := len(line); x < xx; x++ {
-				screen.Screen().SetContent(x+3, y, ' ', nil, tcell.StyleDefault)
+				screen.Screen().SetContent(x+xStart, y, ' ', nil, tcell.StyleDefault)
 			}
 
 		}
 	}
 
-	screen.Screen().Show()
+	if t.h > end {
+		for y := end; y < t.h; y++ {
+			screen.FillLineEmpty(y, tcell.StyleDefault)
+		}
+	}
 }
 
 func (t *Tab) Cursor() *Cursor {
@@ -158,17 +154,8 @@ func (t *Tab) MoveUp() {
 	if t.cursor.Line == 0 {
 		return
 	}
-
-	newLine := t.lines[t.cursor.Line-1]
-	lnl := len(newLine) - 1
-
-	if t.cursor.PrevPosition <= lnl {
-		t.cursor.Position = t.cursor.PrevPosition
-	} else {
-		t.cursor.Position = max(lnl, 0)
-	}
-
 	t.cursor.Line--
+	t.updateCursorPosition()
 	t.Draw()
 }
 
@@ -176,18 +163,21 @@ func (t *Tab) MoveDown() {
 	if t.cursor.Line >= len(t.lines)-1 {
 		return
 	}
+	t.cursor.Line++
+	t.updateCursorPosition()
+	t.Draw()
+}
 
-	newLine := t.lines[t.cursor.Line+1]
-	lnl := len(newLine) - 1
+// updateCursorPosition updates cursor position on the current line.
+//   - If current line is long enough to use cursor's PrevPosition,
+func (t *Tab) updateCursorPosition() {
+	newLineLen := len(t.lines[t.cursor.Line]) - 1
 
-	if t.cursor.PrevPosition <= lnl {
+	if t.cursor.PrevPosition <= newLineLen {
 		t.cursor.Position = t.cursor.PrevPosition
 	} else {
-		t.cursor.Position = max(lnl, 0)
+		t.cursor.Position = max(newLineLen, 0)
 	}
-
-	t.cursor.Line++
-	t.Draw()
 }
 
 func (t *Tab) MoveLeft() {

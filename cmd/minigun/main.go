@@ -28,7 +28,6 @@ func main() {
 		case *tcell.EventResize:
 			screen.Screen().Sync()
 			mg.Tab.Resize()
-			mg.Draw()
 		case *tcell.EventKey:
 			kh.Handle(event)
 		}

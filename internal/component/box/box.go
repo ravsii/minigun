@@ -19,7 +19,8 @@ type Box struct {
 
 	fg, bg tcell.Color
 
-	p component.Padding
+	p      component.Padding
+	border component.Border
 }
 
 func New(x, y, w, h int, opts ...BoxOption) *Box {
@@ -40,15 +41,34 @@ func New(x, y, w, h int, opts ...BoxOption) *Box {
 }
 
 func (b *Box) Draw(runeAt RuneAt) {
-	fnTop := b.y + b.p.Top
-	// fnBottom := b.y + b.h
-	fnLeft := b.x + b.p.Left
-	// fnRight := b.x + b.w
+	mask := b.border.Mask()
+	borderLeft := mask&component.BorderLeft == component.BorderLeft
+	borderTop := mask&component.BorderTop == component.BorderTop
+	borderRight := mask&component.BorderRight == component.BorderRight
+	borderBottom := mask&component.BorderBottom == component.BorderBottom
 
-	fullWidthEnd := b.x + b.w + b.p.Left + b.p.Right
-	fullHeightEnd := b.y + b.h + b.p.Top + b.p.Bottom
+	fnTop := b.y + b.p.Top
+	if borderTop {
+		fnTop++
+	}
+
+	fnLeft := b.x + b.p.Left
+	if borderLeft {
+		fnLeft++
+	}
+
+	fullWidthEnd := fnLeft + b.w + b.p.Right
+	if borderRight {
+		fullWidthEnd++
+	}
+	fullHeightEnd := fnTop + b.h + b.p.Bottom
+	if borderBottom {
+		fullHeightEnd++
+	}
 
 	style := tcell.StyleDefault.Background(b.bg).Foreground(b.fg)
+
+	// todo move padding/borders/etc draws inside them
 
 	// Padding
 	for y := b.y; y < fullHeightEnd; y++ {
@@ -65,5 +85,21 @@ func (b *Box) Draw(runeAt RuneAt) {
 		}
 	}
 
-	screen.Show()
+	borderRune := b.border.Rune()
+
+	// Borders
+	if borderTop {
+		screen.FillLineFromTo(b.x, fullWidthEnd, b.y, borderRune, style)
+	}
+	if borderBottom {
+		screen.FillLineFromTo(b.x, fullWidthEnd, fullHeightEnd, borderRune, style)
+	}
+	for y := b.y; y < fullHeightEnd; y++ {
+		if borderLeft {
+			screen.SetRuneStyle(b.x, y, borderRune, style)
+		}
+		if borderRight {
+			screen.SetRuneStyle(fullWidthEnd-1, y, borderRune, style)
+		}
+	}
 }
