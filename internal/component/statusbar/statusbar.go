@@ -30,7 +30,7 @@ func New() StatusBar {
 }
 
 func (s *StatusBar) SetCursor(l, p int) {
-	s.cursorLine, s.cursorPos = l, p
+	s.cursorLine, s.cursorPos = l+1, p+1
 }
 
 func (s *StatusBar) Draw() {
