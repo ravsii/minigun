@@ -9,6 +9,7 @@ func (h *CommandHandler) OpenFile(args ...string) {
 
 	if err := h.m.Tab.FromPath(args[0]); err != nil {
 		h.m.CommandLine.Errorf("can't open %s: %s", args[0], err)
+		return
 	}
 
 	h.m.Tab.Draw()

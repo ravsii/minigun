@@ -1,10 +1,10 @@
 package minigun
 
 import (
-	"github.com/ravsii/minigun/internal/component/cmdline"
-	"github.com/ravsii/minigun/internal/component/statusbar"
-	"github.com/ravsii/minigun/internal/component/tab"
+	"github.com/ravsii/minigun/internal/cmdline"
 	"github.com/ravsii/minigun/internal/screen"
+	"github.com/ravsii/minigun/internal/statusbar"
+	"github.com/ravsii/minigun/internal/tab"
 )
 
 // Minigun is the main "app" struct.
