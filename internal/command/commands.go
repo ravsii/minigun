@@ -28,13 +28,15 @@ type CommandHandler struct {
 func New(mg *minigun.Minigun) CommandHandler {
 	handler := CommandHandler{m: mg}
 	handler.cmds = map[string]Cmd{
-		"execute":    handler.CmdExecute,
-		"move_down":  handler.MoveDown,
-		"move_left":  handler.MoveLeft,
-		"move_right": handler.MoveRight,
-		"move_up":    handler.MoveUp,
-		"open":       handler.OpenFile,
-		"quit":       handler.Quit,
+		"enter_command_mode": handler.EnterCommandMode,
+		"execute":            handler.CmdExecute,
+		"move_down":          handler.MoveDown,
+		"move_left":          handler.MoveLeft,
+		"move_right":         handler.MoveRight,
+		"move_up":            handler.MoveUp,
+		"noop":               func(...string) {}, // bind-remover
+		"open":               handler.OpenFile,
+		"quit":               handler.Quit,
 	}
 	handler.aliases = map[string]string{
 		"o": "open",
@@ -85,7 +87,7 @@ func (h *CommandHandler) CmdExecute(args ...string) {
 	cmd()
 }
 
-func (h *CommandHandler) GoIntoCommandMode(...string) {
+func (h *CommandHandler) EnterCommandMode(...string) {
 	mode.Set(mode.Console)
 	h.m.StatusBar.Draw()
 	screen.Screen().SetCursorStyle(tcell.CursorStyleBlinkingBar)

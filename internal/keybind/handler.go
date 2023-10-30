@@ -24,7 +24,7 @@ func (h *KeybindHandler) Handle(e tcell.Event) {
 	case key.Key() == tcell.KeyCtrlC:
 		h.c.Quit()
 	case key.Rune() == ':':
-		h.c.GoIntoCommandMode()
+		h.c.EnterCommandMode()
 	case key.Key() == tcell.KeyBackspace2:
 		h.c.ClearCommandLine()
 	case key.Rune() == 'H' || key.Rune() == 'h':

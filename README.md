@@ -16,6 +16,7 @@ Implementation order is "when needed"
 - [ ] Modes
   - [x] View
     - [x] `hjkl` movements
+    - [x] Line Numbers
   - [ ] Insert Mode
     - [ ] `i`, `I`, `a`, `A` will do for now
   - [x] Command Mode (`:` from vim)
@@ -31,8 +32,9 @@ Implementation order is "when needed"
   - [ ] Must Have
     - [x] Padding
     - [ ] Margin
-    - [ ] Border
-  - [x] Basic boxes
+    - [x] Border
+  - [x] Basic UI abstractions
+    - [x] Box / Text Box
 - [ ] File / Project tree
 - [ ] Config options
   - [ ] Global / per project config

@@ -1,0 +1,6 @@
+view:
+  h: "move_left"
+  j: "move_up"
+  k: "move_down"
+  l: "move_right"
+  ':': "enter_command_mode"
