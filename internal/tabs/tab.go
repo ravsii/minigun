@@ -5,6 +5,7 @@ import (
 	"io"
 	"math"
 	"os"
+	"strings"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/ravsii/minigun/internal/component"
@@ -28,6 +29,8 @@ type Tab struct {
 	h       int
 	xOffset int
 	yOffset int
+
+	filePath string
 }
 
 func New(w, h, xOffset, yOffset int) *Tab {
@@ -66,6 +69,7 @@ func (t *Tab) FromPath(path string) error {
 	}
 
 	t.lines = lines
+	t.filePath = path
 	t.Draw()
 	return nil
 }
@@ -198,4 +202,14 @@ func (t *Tab) MoveRight() {
 	t.cursor.Position++
 	t.cursor.PrevPosition = t.cursor.Position
 	t.Draw()
+}
+
+func (t *Tab) AsString() string {
+	return strings.Join(t.lines, "\n")
+}
+
+// Path returns filepath if a file was read from the disk, or an empty
+// string otherwise.
+func (t *Tab) Path() string {
+	return t.filePath
 }

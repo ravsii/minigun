@@ -37,10 +37,12 @@ func New(mg *minigun.Minigun) CommandHandler {
 		"noop":               func(...string) {}, // bind-remover
 		"open":               handler.OpenFile,
 		"quit":               handler.Quit,
+		"write":              handler.WriteFile,
 	}
 	handler.aliases = map[string]string{
 		"o": "open",
 		"q": "quit",
+		"w": "write",
 	}
 
 	for k, v := range handler.aliases {

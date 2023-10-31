@@ -8,7 +8,7 @@ It aims to be a battaries-included terminal text editor. Ideally I'd like to swi
 
 ## Glossary
 
-Tab - usually what is called a buffer in other editors, but we'd like to keep it simple.
+- `Tab` - usually what is called a buffer in other editors, but we'd like to keep it simple.
 
 ## Status
 
@@ -18,14 +18,11 @@ Implementation order is "when needed". Literally everything is WIP and could be 
 
 - [x] Debug info
   - [x] `.log` file
-    - Should write to a user-level config folder level only `$HOME/.config/minigun/debug.log`
-    - [x] Using an extra flag like `-logfile` to add an additional log file fore debugging could be useful as well
-  - [x] Some on-screen output (Command mode)
-    - [x] Error messages
-    - [x] Info messages
+    - Defaults to `$HOME/.config/minigun/debug.log`, can be overwritten by using `-logfile`
 - [x] Status bar - like modes and unlike nvim\helix, status bar is global and not per-tab for easier inspection of the current state
   - [x] Current Mode
   - [x] Cursor Line / Position
+- [x] Commands
 - [x] Basic Components Library - We need some kind of a UI components library, because rn everything is hardcoded so its not good.
   - [x] Box
     - [x] Padding
@@ -48,13 +45,10 @@ Implementation order is "when needed". Literally everything is WIP and could be 
   - [ ] Insert Mode
     - [ ] `i`, `I`, `a`, `A` will do for now
   - [x] Command Mode (`:` from vim)
+    - [x] Error / Info messages
   - [ ] Replace Mode (single char, `r` from vim)
   - [ ] File / Workspace mode (kind of file explorer)
   - [ ] Still thinking about select-like mode. tbh I like `helix`'s approach more. (select-action rather than `nvim`'s action-select)
-- [ ] Commands
-  - [x] Make all integrations with the minigun via commands, no hardcoded actions
-  - [x] Opening files (`:o`, `:open`)
-  - [ ] Saving files (after Replace or Insert mode)
 - [ ] Config options
   - [ ] Global / per project config
   - [ ] Line Numbers
@@ -76,3 +70,7 @@ Implementation order is "when needed". Literally everything is WIP and could be 
 ## Preview (current WIP version)
 
 ![demo gif](./demo/base.gif)
+
+## List of Commands
+
+[here](https://github.com/ravsii/minigun/blob/main/internal/command/commands.go)
