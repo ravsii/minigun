@@ -1,4 +1,4 @@
-package tab
+package tabs
 
 import (
 	"bytes"
@@ -66,6 +66,7 @@ func (t *Tab) FromPath(path string) error {
 	}
 
 	t.lines = lines
+	t.Draw()
 	return nil
 }
 

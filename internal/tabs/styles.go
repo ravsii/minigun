@@ -1,4 +1,4 @@
-package tab
+package tabs
 
 import "github.com/gdamore/tcell/v2"
 

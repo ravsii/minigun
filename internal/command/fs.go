@@ -12,7 +12,5 @@ func (h *CommandHandler) OpenFile(args ...string) {
 		return
 	}
 
-	h.m.Tab.Draw()
-
 	h.m.CommandLine.Infof("opened %s", args[0])
 }

@@ -22,6 +22,6 @@ func Current() Mode {
 	return current
 }
 
-func String() string {
-	return modeString[current]
+func (m Mode) String() string {
+	return modeString[m]
 }

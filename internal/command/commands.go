@@ -43,9 +43,9 @@ func New(mg *minigun.Minigun) CommandHandler {
 		"q": "quit",
 	}
 
-	for _, v := range handler.aliases {
+	for k, v := range handler.aliases {
 		if _, ok := handler.cmds[v]; !ok {
-			panic("unknown alias: " + v)
+			panic("unknown alias: " + v + " for " + k)
 		}
 	}
 

@@ -17,8 +17,8 @@ var _ component.Component = (*CommandLine)(nil)
 type CommandLine struct {
 }
 
-func New() CommandLine {
-	return CommandLine{}
+func New() *CommandLine {
+	return &CommandLine{}
 }
 
 func (c *CommandLine) Draw() {
