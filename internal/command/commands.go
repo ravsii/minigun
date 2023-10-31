@@ -4,10 +4,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gdamore/tcell/v2"
 	"github.com/ravsii/minigun/internal/minigun"
-	"github.com/ravsii/minigun/internal/mode"
-	"github.com/ravsii/minigun/internal/screen"
 )
 
 // Cmd a function type for ANY command possible inside the minigun.
@@ -28,7 +25,9 @@ type CommandHandler struct {
 func New(mg *minigun.Minigun) CommandHandler {
 	handler := CommandHandler{m: mg}
 	handler.cmds = map[string]Cmd{
+		"clear":              handler.ClearCommandLine,
 		"enter_command_mode": handler.EnterCommandMode,
+		"enter_replace_mode": handler.EnterCommandMode,
 		"execute":            handler.CmdExecute,
 		"move_down":          handler.MoveDown,
 		"move_left":          handler.MoveLeft,
@@ -87,23 +86,6 @@ func (h *CommandHandler) CmdExecute(args ...string) {
 		return
 	}
 	cmd()
-}
-
-func (h *CommandHandler) EnterCommandMode(...string) {
-	mode.Set(mode.Console)
-	h.m.StatusBar.Draw()
-	screen.Screen().SetCursorStyle(tcell.CursorStyleBlinkingBar)
-	defer func() {
-		mode.Set(mode.View)
-		screen.Screen().SetCursorStyle(tcell.CursorStyleBlinkingBlock)
-		screen.Screen().HideCursor()
-		h.m.StatusBar.Draw()
-	}()
-
-	input := h.m.CommandLine.HandleUserInput()
-	if input != "" {
-		h.CmdExecute(strings.Split(input, " ")...)
-	}
 }
 
 func (h *CommandHandler) ClearCommandLine(...string) {

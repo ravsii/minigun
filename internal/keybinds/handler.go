@@ -1,6 +1,8 @@
 package keybinds
 
 import (
+	"unicode"
+
 	"github.com/gdamore/tcell/v2"
 	"github.com/ravsii/minigun/internal/command"
 	"github.com/ravsii/minigun/internal/mode"
@@ -21,6 +23,8 @@ func (v *KeybindHandler) Handle(e tcell.Event) {
 		v.handleView(e)
 	case mode.Console:
 		v.handleCommand(e)
+	case mode.Replace:
+		v.handleReplace(e)
 	default:
 		v.c.Info("unknown mode ", mode.Current().String())
 	}
@@ -49,6 +53,8 @@ func (v *KeybindHandler) handleView(event tcell.Event) {
 		v.c.MoveUp()
 	case key.Rune() == 'L' || key.Rune() == 'l':
 		v.c.MoveRight()
+	case key.Rune() == 'R' || key.Rune() == 'r':
+		v.c.EnterReplaceMode()
 	}
 }
 
@@ -73,5 +79,26 @@ func (v *KeybindHandler) handleCommand(event tcell.Event) {
 		v.c.MoveUp()
 	case key.Rune() == 'L' || key.Rune() == 'l':
 		v.c.MoveRight()
+
 	}
+}
+
+func (v *KeybindHandler) handleReplace(event tcell.Event) {
+	key, ok := event.(*tcell.EventKey)
+	if !ok {
+		return
+	}
+
+	for {
+		r := key.Rune()
+		if !unicode.IsGraphic(r) {
+			continue
+		}
+
+		v.c.ReplaceSelected(string(r))
+
+		break
+	}
+
+	v.c.EnterViewMode()
 }

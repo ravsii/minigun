@@ -38,7 +38,7 @@ Implementation order is "when needed". Literally everything is WIP and could be 
 ### Work in Progress
 
 - [ ] Modes - Unlike in helix/nvim where mode is usually per-tab, minigun modes are global and represent the current "state" of the editor
-  - [ ] Better mode handling & dependencies between elements
+  - [x] Better mode handling & dependencies between elements
   - [x] View
     - [x] `hjkl` movements
     - [x] Line Numbers
@@ -46,7 +46,9 @@ Implementation order is "when needed". Literally everything is WIP and could be 
     - [ ] `i`, `I`, `a`, `A` will do for now
   - [x] Command Mode (`:` from vim)
     - [x] Error / Info messages
-  - [ ] Replace Mode (single char, `r` from vim)
+    - [ ] `wq`
+    - [ ] Although we don't have any _errors_, exclamations mark support would be nice for forced stuff like `:wq!`
+  - [x] Replace Mode (single char, `r` from vim)
   - [ ] File / Workspace mode (kind of file explorer)
   - [ ] Still thinking about select-like mode. tbh I like `helix`'s approach more. (select-action rather than `nvim`'s action-select)
 - [ ] Config options

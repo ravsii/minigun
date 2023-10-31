@@ -5,11 +5,13 @@ type Mode int
 const (
 	View Mode = iota
 	Console
+	Replace
 )
 
 var modeString = map[Mode]string{
 	View:    "View",
 	Console: "Console",
+	Replace: "Replace",
 }
 
 var current = View

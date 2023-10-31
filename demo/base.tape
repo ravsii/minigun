@@ -25,6 +25,9 @@ Backspace@100ms 3
 Sleep 1s
 Enter
 Sleep 1s
-Type@100ms ":q"
+Type@100ms "r"
+Sleep 500ms
+Type@100ms "al"
+Sleep 500ms
+Type@100ms ":wq"
 Sleep 1s
-Enter

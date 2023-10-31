@@ -12,9 +12,10 @@ import (
 	"github.com/ravsii/minigun/internal/screen"
 )
 
-var modeColor = map[string]tcell.Color{
-	"View":    tcell.NewHexColor(0xFF0000),
-	"Console": tcell.NewHexColor(0x00FF00),
+var modeColor = map[mode.Mode]tcell.Color{
+	mode.View:    tcell.NewHexColor(0xFF0000),
+	mode.Console: tcell.NewHexColor(0x00FF00),
+	mode.Replace: tcell.NewHexColor(0x000FF0),
 }
 
 var _ component.Component = (*StatusBar)(nil)
@@ -38,7 +39,7 @@ func (s *StatusBar) Draw() {
 	screen.FillLineEmpty(y, tcell.StyleDefault.Background(tcell.ColorGold))
 
 	modeStr := mode.Current().String()
-	modeColor := modeColor[modeStr]
+	modeColor := modeColor[mode.Current()]
 
 	paddingY2 := component.Padding{Left: 2, Right: 2}
 

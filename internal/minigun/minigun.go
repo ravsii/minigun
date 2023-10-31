@@ -3,8 +3,8 @@ package minigun
 import (
 	"github.com/ravsii/minigun/internal/cmdline"
 	"github.com/ravsii/minigun/internal/screen"
+	"github.com/ravsii/minigun/internal/statusbar"
 	"github.com/ravsii/minigun/internal/tabs"
-	"github.com/ravsii/minigun/internal/tabs/statusbar"
 )
 
 // Minigun is the main "app" struct.

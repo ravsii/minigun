@@ -1,7 +1,6 @@
 package tabs
 
 import (
-	"bytes"
 	"io"
 	"math"
 	"os"
@@ -22,7 +21,7 @@ const (
 var _ component.Component = (*Tab)(nil)
 
 type Tab struct {
-	lines  []string
+	lines  [][]rune
 	cursor Cursor
 
 	w       int
@@ -62,10 +61,10 @@ func (t *Tab) FromPath(path string) error {
 		return err
 	}
 
-	lineBytes := bytes.Split(b, []byte("\n"))
-	lines := make([]string, len(lineBytes))
+	lineBytes := strings.Split(string(b), "\n")
+	lines := make([][]rune, len(lineBytes))
 	for i := range lineBytes {
-		lines[i] = string(lineBytes[i])
+		lines[i] = []rune(lineBytes[i])
 	}
 
 	t.lines = lines
@@ -204,12 +203,23 @@ func (t *Tab) MoveRight() {
 	t.Draw()
 }
 
+// TODO: refactor
 func (t *Tab) AsString() string {
-	return strings.Join(t.lines, "\n")
+	s := ""
+	for i := range t.lines {
+		s += string(t.lines[i]) + "\n"
+	}
+	return s
 }
 
 // Path returns filepath if a file was read from the disk, or an empty
 // string otherwise.
 func (t *Tab) Path() string {
 	return t.filePath
+}
+
+func (t *Tab) ReplaceSelected(r rune) {
+	t.lines[t.cursor.Line][t.cursor.Position] = r
+	// todo: optimize, we need to re-rended only 1 character
+	t.Draw()
 }
