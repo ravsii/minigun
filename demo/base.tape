@@ -6,7 +6,7 @@ Set Height 600
 Set Padding 20
 Set Margin 10
 Set MarginFill "#14A07B"
-Set BorderRadius 40
+Set BorderRadius 20
 
 # Type a command in the terminal.
 Type@0s "./build/minigun"
