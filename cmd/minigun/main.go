@@ -1,24 +1,30 @@
 package main
 
 import (
-	"os"
+	"flag"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/ravsii/minigun/internal/command"
 	"github.com/ravsii/minigun/internal/keybinds"
+	"github.com/ravsii/minigun/internal/log"
 	"github.com/ravsii/minigun/internal/minigun"
 	"github.com/ravsii/minigun/internal/screen"
 )
 
+var logFilePath string
+
 func main() {
+	parseFlags()
+	log.Init(logFilePath)
 	defer screen.Finish()
 
 	mg := minigun.New()
 	ch := command.New(&mg)
 	kh := keybinds.New(&ch)
 
-	if len(os.Args) > 1 {
-		ch.OpenFile(os.Args[1:]...)
+	args := flag.Args()
+	if len(args) > 0 {
+		ch.OpenFile(args...)
 	}
 
 	mg.Draw()
@@ -32,5 +38,9 @@ func main() {
 			kh.Handle(event)
 		}
 	}
+}
 
+func parseFlags() {
+	flag.StringVar(&logFilePath, "logfile", "", "debug.log filepath")
+	flag.Parse()
 }

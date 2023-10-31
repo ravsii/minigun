@@ -16,6 +16,13 @@ Implementation order is "when needed". Literally everything is WIP and could be 
 
 ### Done
 
+- [x] Debug info
+  - [x] `.log` file
+    - Should write to a user-level config folder level only `$HOME/.config/minigun/debug.log`
+    - [x] Using an extra flag like `-logfile` to add an additional log file fore debugging could be useful as well
+  - [x] Some on-screen output (Command mode)
+    - [x] Error messages
+    - [x] Info messages
 - [x] Status bar - like modes and unlike nvim\helix, status bar is global and not per-tab for easier inspection of the current state
   - [x] Current Mode
   - [x] Cursor Line / Position
@@ -27,15 +34,13 @@ Implementation order is "when needed". Literally everything is WIP and could be 
   - [x] Text Box
   - [ ] Probably something else, but literally evetything could be done using a box
 
+### Bugs
+
+- [ ] Cursor appears on empty lines
+- [ ] Line numbers don't update as expected
+
 ### Work in Progress
 
-- [ ] Debug info
-  - [ ] `.log` file
-    - Should write to a user-level config folder level only `$HOME/.config/minigun/debug.log`
-    - Using an extra flag like `-logfile` to add an additional log file fore debugging could be useful as well
-  - [x] Some on-screen output (Command mode)
-    - [x] Error messages
-    - [x] Info messages
 - [ ] Modes - Unlike in helix/nvim where mode is usually per-tab, minigun modes are global and represent the current "state" of the editor
   - [ ] Better mode handling & dependencies between elements
   - [x] View
