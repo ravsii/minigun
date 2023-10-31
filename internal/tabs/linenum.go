@@ -33,9 +33,9 @@ func (t *Tab) drawLineNumbers(fromLine int) {
 
 	lines := make([]string, t.h)
 	for y := 0; y < t.h; y++ {
-		line := fromLine + y + 1
-		if line < t.h {
-			lines[y] = fmt.Sprintf("%*d", width, line)
+		line := fromLine + y
+		if line < fromLine+t.h {
+			lines[y] = fmt.Sprintf("%*d", width, line+1)
 		} else {
 			lines[y] = fmt.Sprintf("%*c", width, '~')
 		}

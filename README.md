@@ -37,7 +37,6 @@ Implementation order is "when needed". Literally everything is WIP and could be 
 ### Bugs
 
 - [ ] Cursor appears on empty lines
-- [ ] Line numbers don't update as expected
 
 ### Work in Progress
 

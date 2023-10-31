@@ -25,7 +25,10 @@ func Init(fPath string) {
 		panic(err)
 	}
 
-	l := slog.New(slog.NewTextHandler(logF, nil))
+	l := slog.New(slog.NewTextHandler(
+		logF,
+		&slog.HandlerOptions{Level: slog.LevelDebug},
+	))
 	slog.SetDefault(l)
 }
 

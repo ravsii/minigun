@@ -15,7 +15,7 @@ Sleep 1s
 
 Type@100ms ":open README.md"
 Enter
-Type "jjjjjjjjjj"
+Type "jjjjjjjjjjjjjjjjjjjjjjjjjjjj"
 Sleep 500ms
 Type "lllllllllll"
 Sleep 500ms
