@@ -5,8 +5,8 @@ import (
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/ravsii/minigun/internal/command"
+	"github.com/ravsii/minigun/internal/config/log"
 	"github.com/ravsii/minigun/internal/keybinds"
-	"github.com/ravsii/minigun/internal/log"
 	"github.com/ravsii/minigun/internal/minigun"
 	"github.com/ravsii/minigun/internal/screen"
 )

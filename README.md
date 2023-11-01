@@ -19,17 +19,13 @@ Implementation order is "when needed". Literally everything is WIP and could be 
 - [x] Debug info
   - [x] `.log` file
     - Defaults to `$HOME/.config/minigun/debug.log`, can be overwritten by using `-logfile`
-- [x] Status bar - like modes and unlike nvim\helix, status bar is global and not per-tab for easier inspection of the current state
+- [x] Status bar - like modes and unlike nvim\helix, status bar is global and not per-tab for easier inspection of the current "state"
   - [x] Current Mode
   - [x] Cursor Line / Position
 - [x] Commands
 - [x] Basic Components Library - We need some kind of a UI components library, because rn everything is hardcoded so its not good.
   - [x] Box
-    - [x] Padding
-    - [x] Border
-    - [ ] Margin - haven't had a need for this one yet
   - [x] Text Box
-  - [ ] Probably something else, but literally evetything could be done using a box
 
 ### Bugs
 
@@ -38,14 +34,10 @@ Implementation order is "when needed". Literally everything is WIP and could be 
 ### Work in Progress
 
 - [ ] Modes - Unlike in helix/nvim where mode is usually per-tab, minigun modes are global and represent the current "state" of the editor
-  - [x] Better mode handling & dependencies between elements
   - [x] View
-    - [x] `hjkl` movements
-    - [x] Line Numbers
   - [ ] Insert Mode
     - [ ] `i`, `I`, `a`, `A` will do for now
   - [x] Command Mode (`:` from vim)
-    - [x] Error / Info messages
     - [ ] `wq`
     - [ ] Although we don't have any _errors_, exclamations mark support would be nice for forced stuff like `:wq!`
   - [x] Replace Mode (single char, `r` from vim)
