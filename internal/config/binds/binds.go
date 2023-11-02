@@ -11,7 +11,7 @@ import (
 
 const keybindsFilename = "keybinds.toml"
 
-var binds Keybinds
+var b Keybinds
 
 type Keybinds struct {
 	View    map[string]string `toml:"view"`
@@ -19,14 +19,32 @@ type Keybinds struct {
 	Replace map[string]string `toml:"replace"`
 }
 
+func newB() Keybinds {
+	return Keybinds{
+		View:    make(map[string]string),
+		Command: make(map[string]string),
+		Replace: make(map[string]string),
+	}
+}
+
 func (c *Keybinds) Merge(new *Keybinds) {
+	if new == nil {
+		return
+	}
+
 	for key, cmd := range new.View {
 		c.View[strings.ToLower(key)] = cmd
+	}
+	for key, cmd := range new.Command {
+		c.Command[strings.ToLower(key)] = cmd
+	}
+	for key, cmd := range new.Replace {
+		c.Replace[strings.ToLower(key)] = cmd
 	}
 }
 
 func Load() error {
-	var newBinds Keybinds
+	newBinds := newB()
 
 	global, err := loadGlobal()
 	if err != nil {
@@ -40,15 +58,16 @@ func Load() error {
 	}
 	newBinds.Merge(local)
 
-	binds = newBinds
+	b = newBinds
 	return nil
 }
 
 func CommandFor(m mode.Mode, key string) (string, bool) {
+	key = strings.ToLower(key)
 	var cmd string
 	switch m {
 	case mode.View:
-		if bind, ok := binds.View[key]; ok {
+		if bind, ok := b.View[key]; ok {
 			cmd = bind
 		}
 	default:
@@ -63,7 +82,22 @@ func CommandFor(m mode.Mode, key string) (string, bool) {
 }
 
 func loadGlobal() (*Keybinds, error) {
-	return nil, nil
+	f, exists, err := config.DefaultProjectDirFile(keybindsFilename)
+	if !exists {
+		return nil, nil
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	var global Keybinds
+
+	if _, err := toml.NewDecoder(f).Decode(&global); err != nil {
+		return nil, err
+	}
+
+	return &global, nil
 }
 
 func loadLocal() (*Keybinds, error) {
@@ -82,5 +116,5 @@ func loadLocal() (*Keybinds, error) {
 		return nil, err
 	}
 
-	return &binds, nil
+	return &local, nil
 }
