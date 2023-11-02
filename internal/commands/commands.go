@@ -80,7 +80,7 @@ func (h *CommandHandler) CmdExecute(args ...string) {
 
 	cmd, found := h.CmdFromString(args[0])
 	if !found {
-		h.M.CommandLine.Errorf("unknown command: %s", args[0])
+		h.M.CommandLine.Errorf("unknown command: %s", strings.Join(args, " "))
 		return
 	}
 

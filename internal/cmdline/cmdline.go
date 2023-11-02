@@ -6,6 +6,8 @@ import (
 	"github.com/ravsii/minigun/internal/screen"
 )
 
+const inputSize = 20
+
 var (
 	cursorInput = tcell.StyleDefault.Underline(true)
 )
@@ -19,7 +21,8 @@ type CommandLine struct {
 
 func New() *CommandLine {
 	return &CommandLine{
-		input: make([]rune, 0),
+		cursorPos: -1,
+		input:     make([]rune, 0, inputSize),
 	}
 }
 
@@ -29,6 +32,10 @@ func (c *CommandLine) Draw() {
 
 // AddRune adds a rune at a current input position
 func (c *CommandLine) AddRune(r rune) {
+	if (c.cursorPos) < 0 {
+		c.cursorPos = 0
+	}
+
 	if c.cursorPos == len(c.input) {
 		c.input = append(c.input, r)
 	} else {
@@ -82,7 +89,8 @@ func (c *CommandLine) RemoveRune() {
 }
 
 func (c *CommandLine) Reset() {
-	c.input = make([]rune, 0)
+	c.input = make([]rune, 0, inputSize)
+	c.cursorPos = -1
 	c.Draw()
 }
 

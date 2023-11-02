@@ -13,6 +13,7 @@ func (h *CommandHandler) EnterViewMode(...string) {
 }
 
 func (h *CommandHandler) EnterCommandMode(...string) {
+	h.ClearCommandLine()
 	h.changeMode(mode.Command)
 }
 
