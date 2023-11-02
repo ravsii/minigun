@@ -5,6 +5,7 @@ import (
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/ravsii/minigun/internal/command"
+	"github.com/ravsii/minigun/internal/config"
 	"github.com/ravsii/minigun/internal/config/log"
 	"github.com/ravsii/minigun/internal/keybinds"
 	"github.com/ravsii/minigun/internal/minigun"
@@ -15,6 +16,9 @@ var logFilePath string
 
 func main() {
 	parseFlags()
+	if err := config.Load(); err != nil {
+		panic(err)
+	}
 	log.Init(logFilePath)
 	defer screen.Finish()
 

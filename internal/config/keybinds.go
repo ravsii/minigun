@@ -1,15 +1,13 @@
 package config
 
 import (
-	"errors"
-	"io/fs"
-	"os"
 	"strings"
 
+	"github.com/ravsii/minigun/internal/mode"
 	"gopkg.in/yaml.v3"
 )
 
-const keybindsLocalPath = ".minigun/keybinds.yaml"
+const keybindsFilename = "keybinds.yaml"
 
 var keybinds keybindsConfig
 
@@ -31,23 +29,41 @@ func Load() error {
 	return loadLocal()
 }
 
+func CommandFor(m mode.Mode, key string) (string, bool) {
+	var cmd string
+	switch m {
+	case mode.View:
+		if bind, ok := keybinds.View[key]; ok {
+			cmd = bind
+		}
+	default:
+		return "", false
+	}
+
+	if cmd == "" {
+		return "", false
+	}
+
+	return cmd, true
+}
+
 func loadGlobal() {
 	// TODO: implement
 }
 
 func loadLocal() error {
-	if _, err := os.Stat(keybindsLocalPath); errors.Is(err, fs.ErrNotExist) {
+	binds, exists, err := ProjectSpecificDirFile(keybindsFilename)
+	if !exists {
 		return nil
 	}
 
-	keybindsFile, err := os.Open(keybindsLocalPath)
 	if err != nil {
 		return err
 	}
 
 	var local keybindsConfig
 
-	if err := yaml.NewDecoder(keybindsFile).Decode(&local); err != nil {
+	if err := yaml.NewDecoder(binds).Decode(&local); err != nil {
 		return err
 	}
 

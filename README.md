@@ -44,10 +44,10 @@ Implementation order is "when needed". Literally everything is WIP and could be 
   - [ ] File / Workspace mode (kind of file explorer)
   - [ ] Still thinking about select-like mode. tbh I like `helix`'s approach more. (select-action rather than `nvim`'s action-select)
 - [ ] Config options
+  - [ ] Migrate to `toml`
   - [ ] Global / per project config
   - [ ] Line Numbers
-  - [x] Keybinds
-    - Technically all input is getting handled by the keybinds already, I just need to move them into config
+  - [x] `keybinds.yaml`
 
 ### "Actually usable"-level features
 
