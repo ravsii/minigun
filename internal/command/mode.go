@@ -8,8 +8,16 @@ import (
 	"github.com/ravsii/minigun/internal/screen"
 )
 
+func (h *CommandHandler) EnterViewMode(...string) {
+	if mode.Current() == mode.Command {
+		h.ClearCommandLine()
+	}
+
+	h.changeMode(mode.View)
+}
+
 func (h *CommandHandler) EnterCommandMode(...string) {
-	h.changeMode(mode.Console)
+	h.changeMode(mode.Command)
 	screen.Screen().SetCursorStyle(tcell.CursorStyleBlinkingBar)
 	defer func() {
 		screen.Screen().SetCursorStyle(tcell.CursorStyleBlinkingBlock)
@@ -25,10 +33,6 @@ func (h *CommandHandler) EnterCommandMode(...string) {
 
 func (h *CommandHandler) EnterReplaceMode(...string) {
 	h.changeMode(mode.Replace)
-}
-
-func (h *CommandHandler) EnterViewMode(...string) {
-	h.changeMode(mode.View)
 }
 
 func (h *CommandHandler) changeMode(m mode.Mode) {

@@ -1,4 +1,4 @@
-package keybinds
+package kbhandler
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/ravsii/minigun/internal/command"
-	"github.com/ravsii/minigun/internal/config"
+	"github.com/ravsii/minigun/internal/config/binds"
 	"github.com/ravsii/minigun/internal/mode"
 	"github.com/ravsii/minigun/internal/screen"
 )
@@ -24,7 +24,7 @@ func (v *KeybindHandler) Handle(e tcell.Event) {
 	switch mode.Current() {
 	case mode.View:
 		v.handleView(e)
-	case mode.Console:
+	case mode.Command:
 		v.handleCommand(e)
 	case mode.Replace:
 		v.handleReplace(e)
@@ -36,7 +36,7 @@ func (v *KeybindHandler) Handle(e tcell.Event) {
 }
 
 func (v *KeybindHandler) handleView(event tcell.Event) {
-	v.handleFromKeybinds(mode.View, event)
+	v.handleFromKeybinds(event)
 }
 
 func (v *KeybindHandler) handleCommand(event tcell.Event) {
@@ -84,7 +84,7 @@ func (v *KeybindHandler) handleReplace(event tcell.Event) {
 	v.c.EnterViewMode()
 }
 
-func (v *KeybindHandler) handleFromKeybinds(m mode.Mode, event tcell.Event) {
+func (v *KeybindHandler) handleFromKeybinds(event tcell.Event) {
 	key, ok := event.(*tcell.EventKey)
 	if !ok {
 		return
@@ -98,7 +98,7 @@ func (v *KeybindHandler) handleFromKeybinds(m mode.Mode, event tcell.Event) {
 		k = key.Name()
 	}
 
-	cmd, found := config.CommandFor(m, k)
+	cmd, found := binds.CommandFor(mode.Current(), k)
 	if !found {
 		v.c.Info(fmt.Sprintf("no bind for %q", k))
 		return

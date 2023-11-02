@@ -5,6 +5,7 @@ go 1.21.3
 require github.com/gdamore/tcell/v2 v2.6.0
 
 require (
+	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/gdamore/encoding v1.0.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect

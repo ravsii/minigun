@@ -14,7 +14,7 @@ import (
 
 var modeColor = map[mode.Mode]tcell.Color{
 	mode.View:    tcell.NewHexColor(0xFF0000),
-	mode.Console: tcell.NewHexColor(0x00FF00),
+	mode.Command: tcell.NewHexColor(0x00FF00),
 	mode.Replace: tcell.NewHexColor(0x000FF0),
 }
 

@@ -5,9 +5,9 @@ import (
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/ravsii/minigun/internal/command"
-	"github.com/ravsii/minigun/internal/config"
+	"github.com/ravsii/minigun/internal/config/binds"
 	"github.com/ravsii/minigun/internal/config/log"
-	"github.com/ravsii/minigun/internal/keybinds"
+	"github.com/ravsii/minigun/internal/kbhandler"
 	"github.com/ravsii/minigun/internal/minigun"
 	"github.com/ravsii/minigun/internal/screen"
 )
@@ -16,7 +16,7 @@ var logFilePath string
 
 func main() {
 	parseFlags()
-	if err := config.Load(); err != nil {
+	if err := binds.Load(); err != nil {
 		panic(err)
 	}
 	log.Init(logFilePath)
@@ -24,7 +24,7 @@ func main() {
 
 	mg := minigun.New()
 	ch := command.New(&mg)
-	kh := keybinds.New(&ch)
+	kh := kbhandler.New(&ch)
 
 	args := flag.Args()
 	if len(args) > 0 {
