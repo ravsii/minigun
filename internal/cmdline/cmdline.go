@@ -1,10 +1,8 @@
 package cmdline
 
 import (
-	"unicode"
-
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/internal/component"
+	"github.com/ravsii/minigun/internal/components"
 	"github.com/ravsii/minigun/internal/screen"
 )
 
@@ -12,80 +10,80 @@ var (
 	cursorInput = tcell.StyleDefault.Underline(true)
 )
 
-var _ component.Component = (*CommandLine)(nil)
+var _ components.Component = (*CommandLine)(nil)
 
 type CommandLine struct {
+	input     []rune
+	cursorPos int
 }
 
 func New() *CommandLine {
-	return &CommandLine{}
+	return &CommandLine{
+		input: make([]rune, 0),
+	}
 }
 
 func (c *CommandLine) Draw() {
-	c.DrawInput("", -1)
+	c.printStyled(":"+string(c.input), tcell.StyleDefault, c.cursorPos)
 }
 
-func (c *CommandLine) DrawInput(input string, cursorAt int) {
-	c.printStyled(":"+input, tcell.StyleDefault, cursorAt)
-}
-
-func (c *CommandLine) HandleUserInput() string {
-	input := make([]rune, 0, 20)
-	var cursorPos int
-
-inputLoop:
-	for {
-		c.DrawInput(string(input), cursorPos)
-		screen.Show()
-
-		event, ok := screen.Screen().PollEvent().(*tcell.EventKey)
-		if !ok {
-			continue
-		}
-
-		switch {
-		case event.Modifiers() != tcell.ModNone:
-			break
-		case event.Key() == tcell.KeyEnter:
-			break inputLoop
-		case event.Key() == tcell.KeyBackspace || event.Key() == tcell.KeyBackspace2:
-			if len(input) == 0 {
-				// vim does quit command mode on empty command & backspace
-				return ""
-			}
-
-			input = append(input[:cursorPos-1], input[cursorPos:]...)
-			cursorPos--
-		case event.Key() == tcell.KeyLeft:
-			if cursorPos > 0 {
-				cursorPos--
-			}
-		case event.Key() == tcell.KeyRight:
-			if cursorPos < len(input) {
-				cursorPos++
-			}
-		case event.Key() == tcell.KeyHome:
-			cursorPos = 0
-		case event.Key() == tcell.KeyEnd:
-			cursorPos = len(input)
-		default:
-			r := event.Rune()
-			if !unicode.IsGraphic(r) {
-				break
-			}
-
-			if cursorPos == len(input) {
-				input = append(input, r)
-			} else {
-				input = append(input[:cursorPos+1], input[cursorPos:]...)
-				input[cursorPos] = r
-			}
-
-			cursorPos++
-		}
+// AddRune adds a rune at a current input position
+func (c *CommandLine) AddRune(r rune) {
+	if c.cursorPos == len(c.input) {
+		c.input = append(c.input, r)
+	} else {
+		c.input = append(c.input[:c.cursorPos+1], c.input[c.cursorPos:]...)
+		c.input[c.cursorPos] = r
 	}
 
-	return string(input)
+	c.cursorPos++
+	c.Draw()
+}
+
+// Input retruns current user input. If you don't need the command anymore,
+// use c.Reset.
+func (c *CommandLine) Input() string {
+	return string(c.input)
+}
+
+func (c *CommandLine) MoveLeft() {
+	if c.cursorPos > 0 {
+		c.cursorPos--
+	}
+	c.Draw()
+}
+
+func (c *CommandLine) MoveRight() {
+	if c.cursorPos < len(c.input) {
+		c.cursorPos++
+	}
+	c.Draw()
+}
+
+func (c *CommandLine) JumpLineStart() {
+	c.cursorPos = 0
+	c.Draw()
+}
+
+func (c *CommandLine) JumpLineEnd() {
+	c.cursorPos = len(c.input)
+	c.Draw()
+}
+
+// RemoveRune removed a current rune before the cursor.
+func (c *CommandLine) RemoveRune() {
+	if len(c.input) == 0 {
+		return
+	}
+
+	c.input = append(c.input[:c.cursorPos-1], c.input[c.cursorPos:]...)
+	c.cursorPos--
+	c.Draw()
+}
+
+func (c *CommandLine) Reset() {
+	c.input = make([]rune, 0)
+	c.Draw()
 }
 
 // printStyled prints the given message using the given style.

@@ -1,4 +1,4 @@
-package command
+package commands
 
 import (
 	"github.com/ravsii/minigun/internal/config/binds"
@@ -6,6 +6,6 @@ import (
 
 func (h *CommandHandler) ReloadConfig(...string) {
 	if err := binds.Load(); err != nil {
-		h.m.CommandLine.Errorf("can't load config: %s", err)
+		h.M.CommandLine.Errorf("can't load config: %s", err)
 	}
 }

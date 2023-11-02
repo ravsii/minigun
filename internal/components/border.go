@@ -1,4 +1,4 @@
-package component
+package components
 
 type BorderPosition int
 

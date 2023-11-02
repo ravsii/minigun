@@ -3,7 +3,7 @@ package textbox
 import (
 	"unicode/utf8"
 
-	"github.com/ravsii/minigun/internal/component/box"
+	"github.com/ravsii/minigun/internal/components/box"
 )
 
 type TextBox struct {

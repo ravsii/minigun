@@ -1,70 +1,77 @@
 package kbhandler
 
 import (
-	"fmt"
+	"strings"
 	"unicode"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/internal/command"
+	"github.com/ravsii/minigun/internal/commands"
 	"github.com/ravsii/minigun/internal/config/binds"
 	"github.com/ravsii/minigun/internal/mode"
 	"github.com/ravsii/minigun/internal/screen"
 )
 
 type KeybindHandler struct {
-	c *command.CommandHandler
+	c *commands.CommandHandler
+
+	aliases map[string]string
 }
 
-func New(c *command.CommandHandler) *KeybindHandler {
-	return &KeybindHandler{c}
+func New(c *commands.CommandHandler) *KeybindHandler {
+	return &KeybindHandler{
+		c: c,
+		aliases: map[string]string{
+			"backspace2": "backspace",
+		},
+	}
 }
 
-func (v *KeybindHandler) Handle(e tcell.Event) {
+func (h *KeybindHandler) Handle(e tcell.Event) {
 
 	switch mode.Current() {
 	case mode.View:
-		v.handleView(e)
+		h.handleView(e)
 	case mode.Command:
-		v.handleCommand(e)
+		h.handleCommand(e)
 	case mode.Replace:
-		v.handleReplace(e)
+		h.handleReplace(e)
 	default:
-		v.c.Info("unknown mode ", mode.Current().String())
+		h.c.Info("unknown mode ", mode.Current().String())
 	}
 
 	screen.Show()
 }
 
-func (v *KeybindHandler) handleView(event tcell.Event) {
-	v.handleFromKeybinds(event)
+func (h *KeybindHandler) handleView(e tcell.Event) {
+	cmd, found := h.cmdFromEvent(e)
+	if !found {
+		return
+	}
+
+	h.c.CmdExecute(cmd)
 }
 
-func (v *KeybindHandler) handleCommand(event tcell.Event) {
-	key, ok := event.(*tcell.EventKey)
+func (h *KeybindHandler) handleCommand(e tcell.Event) {
+	key, ok := e.(*tcell.EventKey)
 	if !ok {
 		return
 	}
 
-	switch {
-	case key.Key() == tcell.KeyCtrlC:
-		v.c.Quit()
-	case key.Rune() == ':':
-		v.c.EnterCommandMode()
-	case key.Key() == tcell.KeyBackspace2:
-		v.c.ClearCommandLine()
-	case key.Rune() == 'H' || key.Rune() == 'h':
-		v.c.MoveLeft()
-	case key.Rune() == 'J' || key.Rune() == 'j':
-		v.c.MoveDown()
-	case key.Rune() == 'K' || key.Rune() == 'k':
-		v.c.MoveUp()
-	case key.Rune() == 'L' || key.Rune() == 'l':
-		v.c.MoveRight()
-
+	cmd, found := h.cmdFromEvent(e)
+	if found {
+		h.c.CmdExecute(cmd)
+		return
 	}
+
+	r := key.Rune()
+	if !unicode.IsGraphic(r) {
+		return
+	}
+
+	h.c.M.CommandLine.AddRune(r)
 }
 
-func (v *KeybindHandler) handleReplace(event tcell.Event) {
+func (h *KeybindHandler) handleReplace(event tcell.Event) {
 	key, ok := event.(*tcell.EventKey)
 	if !ok {
 		return
@@ -76,18 +83,18 @@ func (v *KeybindHandler) handleReplace(event tcell.Event) {
 			continue
 		}
 
-		v.c.ReplaceSelected(string(r))
+		h.c.ReplaceSelected(string(r))
 
 		break
 	}
 
-	v.c.EnterViewMode()
+	h.c.EnterViewMode()
 }
 
-func (v *KeybindHandler) handleFromKeybinds(event tcell.Event) {
-	key, ok := event.(*tcell.EventKey)
+func (h *KeybindHandler) cmdFromEvent(e tcell.Event) (string, bool) {
+	key, ok := e.(*tcell.EventKey)
 	if !ok {
-		return
+		return "", false
 	}
 
 	var k string
@@ -98,11 +105,15 @@ func (v *KeybindHandler) handleFromKeybinds(event tcell.Event) {
 		k = key.Name()
 	}
 
-	cmd, found := binds.CommandFor(mode.Current(), k)
-	if !found {
-		v.c.Info(fmt.Sprintf("no bind for %q", k))
-		return
+	k = strings.ToLower(k)
+	if alias, ok := h.aliases[k]; ok {
+		k = alias
 	}
 
-	v.c.CmdExecute(cmd)
+	cmd, found := binds.CommandFor(mode.Current(), k)
+	if !found {
+		return "", false
+	}
+
+	return cmd, true
 }

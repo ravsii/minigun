@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/internal/component"
+	"github.com/ravsii/minigun/internal/components"
 	"github.com/ravsii/minigun/internal/screen"
 )
 
@@ -18,7 +18,7 @@ const (
 	ModeInsert
 )
 
-var _ component.Component = (*Tab)(nil)
+var _ components.Component = (*Tab)(nil)
 
 type Tab struct {
 	lines  [][]rune

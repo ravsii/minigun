@@ -4,7 +4,7 @@ import (
 	"flag"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/internal/command"
+	"github.com/ravsii/minigun/internal/commands"
 	"github.com/ravsii/minigun/internal/config/binds"
 	"github.com/ravsii/minigun/internal/config/log"
 	"github.com/ravsii/minigun/internal/kbhandler"
@@ -23,7 +23,7 @@ func main() {
 	defer screen.Finish()
 
 	mg := minigun.New()
-	ch := command.New(&mg)
+	ch := commands.New(&mg)
 	kh := kbhandler.New(&ch)
 
 	args := flag.Args()

@@ -1,4 +1,4 @@
-package component
+package components
 
 // probably should be removed
 

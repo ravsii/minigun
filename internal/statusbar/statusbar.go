@@ -5,9 +5,9 @@ import (
 	"unicode/utf8"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/internal/component"
-	"github.com/ravsii/minigun/internal/component/box"
-	"github.com/ravsii/minigun/internal/component/textbox"
+	"github.com/ravsii/minigun/internal/components"
+	"github.com/ravsii/minigun/internal/components/box"
+	"github.com/ravsii/minigun/internal/components/textbox"
 	"github.com/ravsii/minigun/internal/mode"
 	"github.com/ravsii/minigun/internal/screen"
 )
@@ -18,7 +18,7 @@ var modeColor = map[mode.Mode]tcell.Color{
 	mode.Replace: tcell.NewHexColor(0x000FF0),
 }
 
-var _ component.Component = (*StatusBar)(nil)
+var _ components.Component = (*StatusBar)(nil)
 
 type StatusBar struct {
 	cursorLine, cursorPos int
@@ -41,7 +41,7 @@ func (s *StatusBar) Draw() {
 	modeStr := mode.Current().String()
 	modeColor := modeColor[mode.Current()]
 
-	paddingY2 := component.Padding{Left: 2, Right: 2}
+	paddingY2 := components.Padding{Left: 2, Right: 2}
 
 	modeTextBox := textbox.New(0, y, modeStr,
 		box.WithTextColor(tcell.ColorBlack),

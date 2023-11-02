@@ -1,4 +1,4 @@
-package component
+package components
 
 type Padding struct {
 	Top, Bottom, Left, Right int

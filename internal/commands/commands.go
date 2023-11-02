@@ -1,4 +1,4 @@
-package command
+package commands
 
 import (
 	"os"
@@ -19,24 +19,27 @@ type CommandHandler struct {
 	aliases map[string]string
 	cmds    map[string]Cmd
 
-	m *minigun.Minigun
+	M *minigun.Minigun
 }
 
 func New(mg *minigun.Minigun) CommandHandler {
-	handler := CommandHandler{m: mg}
+	handler := CommandHandler{M: mg}
 	handler.cmds = map[string]Cmd{
-		"clear":              handler.ClearCommandLine,
-		"enter_command_mode": handler.EnterCommandMode,
-		"enter_replace_mode": handler.EnterCommandMode,
-		"execute":            handler.CmdExecute,
-		"move_down":          handler.MoveDown,
-		"move_left":          handler.MoveLeft,
-		"move_right":         handler.MoveRight,
-		"move_up":            handler.MoveUp,
-		"noop":               func(...string) {}, // bind-remover
-		"open":               handler.OpenFile,
-		"quit":               handler.Quit,
-		"write":              handler.WriteFile,
+		"clear":               handler.ClearCommandLine,
+		"command_remove_rune": handler.CommandRemoveRune,
+		"command_submit":      handler.CommandSubmit,
+		"enter_command_mode":  handler.EnterCommandMode,
+		"enter_replace_mode":  handler.EnterReplaceMode,
+		"enter_view_mode":     handler.EnterViewMode,
+		"execute":             handler.CmdExecute,
+		"move_down":           handler.MoveDown,
+		"move_left":           handler.MoveLeft,
+		"move_right":          handler.MoveRight,
+		"move_up":             handler.MoveUp,
+		"noop":                func(...string) {}, // bind-remover
+		"open":                handler.OpenFile,
+		"quit":                handler.Quit,
+		"write":               handler.WriteFile,
 	}
 	handler.aliases = map[string]string{
 		"o": "open",
@@ -77,7 +80,7 @@ func (h *CommandHandler) CmdExecute(args ...string) {
 
 	cmd, found := h.CmdFromString(args[0])
 	if !found {
-		h.m.CommandLine.Errorf("unknown command: %s", args[0])
+		h.M.CommandLine.Errorf("unknown command: %s", args[0])
 		return
 	}
 
@@ -89,11 +92,11 @@ func (h *CommandHandler) CmdExecute(args ...string) {
 }
 
 func (h *CommandHandler) ClearCommandLine(...string) {
-	h.m.CommandLine.Draw()
+	h.M.CommandLine.Draw()
 }
 
 func (h *CommandHandler) Info(s ...string) {
-	h.m.CommandLine.Info(strings.Join(s, " "))
+	h.M.CommandLine.Info(strings.Join(s, " "))
 }
 
 func (h *CommandHandler) Quit(...string) {

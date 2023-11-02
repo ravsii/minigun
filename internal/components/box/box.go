@@ -2,7 +2,7 @@ package box
 
 import (
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/internal/component"
+	"github.com/ravsii/minigun/internal/components"
 	"github.com/ravsii/minigun/internal/screen"
 )
 
@@ -19,8 +19,8 @@ type Box struct {
 
 	fg, bg tcell.Color
 
-	p      component.Padding
-	border component.Border
+	p      components.Padding
+	border components.Border
 }
 
 func New(x, y, w, h int, opts ...BoxOption) *Box {
@@ -42,10 +42,10 @@ func New(x, y, w, h int, opts ...BoxOption) *Box {
 
 func (b *Box) Draw(runeAt RuneAt) {
 	mask := b.border.Mask()
-	borderLeft := mask&component.BorderLeft == component.BorderLeft
-	borderTop := mask&component.BorderTop == component.BorderTop
-	borderRight := mask&component.BorderRight == component.BorderRight
-	borderBottom := mask&component.BorderBottom == component.BorderBottom
+	borderLeft := mask&components.BorderLeft == components.BorderLeft
+	borderTop := mask&components.BorderTop == components.BorderTop
+	borderRight := mask&components.BorderRight == components.BorderRight
+	borderBottom := mask&components.BorderBottom == components.BorderBottom
 
 	fnTop := b.y + b.p.Top
 	if borderTop {

@@ -1,4 +1,4 @@
-package command
+package commands
 
 import "unicode/utf8"
 
@@ -8,5 +8,5 @@ func (h *CommandHandler) ReplaceSelected(s ...string) {
 	}
 
 	r, _ := utf8.DecodeRuneInString(s[0])
-	h.m.Tab.ReplaceSelected(r)
+	h.M.Tab.ReplaceSelected(r)
 }

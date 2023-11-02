@@ -5,8 +5,8 @@ import (
 	"math"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/ravsii/minigun/internal/component"
-	"github.com/ravsii/minigun/internal/component/box"
+	"github.com/ravsii/minigun/internal/components"
+	"github.com/ravsii/minigun/internal/components/box"
 )
 
 const vbar = '┆'
@@ -21,13 +21,13 @@ func (t *Tab) lineNumbersWidth() int {
 }
 
 func (t *Tab) drawLineNumbers(fromLine int) {
-	border := component.NewBorder(vbar, component.BorderRight)
+	border := components.NewBorder(vbar, components.BorderRight)
 
 	width := t.lineNumbersWidth()
 
 	lineBox := box.New(t.xOffset, t.yOffset, width, t.h,
 		box.WithBorder(border),
-		box.WithPadding(component.Padding{Left: 1}),
+		box.WithPadding(components.Padding{Left: 1}),
 		box.WithTextColor(tcell.ColorWhite.TrueColor()),
 	)
 

@@ -63,11 +63,18 @@ func Load() error {
 }
 
 func CommandFor(m mode.Mode, key string) (string, bool) {
-	key = strings.ToLower(key)
 	var cmd string
 	switch m {
 	case mode.View:
 		if bind, ok := b.View[key]; ok {
+			cmd = bind
+		}
+	case mode.Command:
+		if bind, ok := b.Command[key]; ok {
+			cmd = bind
+		}
+	case mode.Replace:
+		if bind, ok := b.Replace[key]; ok {
 			cmd = bind
 		}
 	default:

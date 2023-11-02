@@ -7,3 +7,7 @@ l = "move_right"
 
 [command]
 esc = "enter_view_mode"
+backspace = "command_remove_rune"
+enter = "command_submit"
+right = "move_right"
+left = "move_left"

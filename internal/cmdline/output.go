@@ -7,8 +7,8 @@ import (
 )
 
 var (
-	errStyle  = tcell.StyleDefault.Foreground(tcell.NewHexColor(0xFF0000)).Background(tcell.ColorBlack)
-	infoStyle = tcell.StyleDefault.Foreground(tcell.NewHexColor(0x00FF00)).Background(tcell.ColorBlack)
+	errStyle  = tcell.StyleDefault.Foreground(tcell.NewHexColor(0xFF0000).TrueColor()).Background(tcell.ColorBlack.TrueColor())
+	infoStyle = tcell.StyleDefault.Foreground(tcell.NewHexColor(0x00FF00).TrueColor()).Background(tcell.ColorBlack.TrueColor())
 )
 
 func (c *CommandLine) Error(msg string) {
