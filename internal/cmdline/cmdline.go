@@ -77,8 +77,8 @@ func (c *CommandLine) JumpLineEnd() {
 	c.Draw()
 }
 
-// RemoveRune removed a current rune before the cursor.
-func (c *CommandLine) RemoveRune() {
+// DeleteRune removed a current rune before the cursor.
+func (c *CommandLine) DeleteRune() {
 	if len(c.input) == 0 {
 		return
 	}

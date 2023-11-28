@@ -26,22 +26,23 @@ func New(mg *minigun.Minigun) CommandHandler {
 	handler := CommandHandler{M: mg}
 	handler.cmds = map[string]Cmd{
 		"clear":               handler.ClearCommandLine,
-		"command_remove_rune": handler.CommandRemoveRune,
+		"command_delete_rune": handler.CommandDeleteRune,
 		"command_submit":      handler.CommandSubmit,
 		"enter_command_mode":  handler.EnterCommandMode,
 		"enter_edit_mode":     handler.EnterEditMode,
 		"enter_replace_mode":  handler.EnterReplaceMode,
 		"enter_view_mode":     handler.EnterViewMode,
 		"execute":             handler.CmdExecute,
-		"jump_line_end":       handler.JumpLineEnd,
-		"jump_line_start":     handler.JumpLineStart,
-		"move_down":           handler.MoveDown,
-		"move_left":           handler.MoveLeft,
-		"move_right":          handler.MoveRight,
-		"move_up":             handler.MoveUp,
 		"noop":                func(...string) {}, // bind-remover
 		"open":                handler.OpenFile,
 		"quit":                handler.Quit,
+		"tab_delete_rune":     handler.TabDeleteRune,
+		"tab_jump_line_end":   handler.TabJumpLineEnd,
+		"tab_jump_line_start": handler.TabJumpLineStart,
+		"tab_move_down":       handler.TabMoveDown,
+		"tab_move_left":       handler.TabMoveLeft,
+		"tab_move_right":      handler.TabMoveRight,
+		"tab_move_up":         handler.TabMoveUp,
 		"write":               handler.WriteFile,
 	}
 	handler.aliases = map[string]string{

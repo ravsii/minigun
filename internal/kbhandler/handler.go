@@ -84,7 +84,7 @@ func (h *KeybindHandler) handleReplace(event tcell.Event) {
 			continue
 		}
 
-		h.c.ReplaceSelected(string(r))
+		h.c.ReplaceRune(string(r))
 		break
 	}
 
@@ -103,7 +103,7 @@ func (h *KeybindHandler) handleEdit(event tcell.Event) {
 			continue
 		}
 
-		h.c.ReplaceSelected(string(r))
+		h.c.ReplaceRune(string(r))
 		break
 	}
 

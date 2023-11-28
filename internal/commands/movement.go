@@ -2,17 +2,17 @@ package commands
 
 import "github.com/ravsii/minigun/internal/mode"
 
-func (h *CommandHandler) MoveUp(...string) {
+func (h *CommandHandler) TabMoveUp(...string) {
 	h.M.Tab.MoveUp()
 	h.updateCursorSB()
 }
 
-func (h *CommandHandler) MoveDown(...string) {
+func (h *CommandHandler) TabMoveDown(...string) {
 	h.M.Tab.MoveDown()
 	h.updateCursorSB()
 }
 
-func (h *CommandHandler) MoveLeft(...string) {
+func (h *CommandHandler) TabMoveLeft(...string) {
 	switch mode.Current() {
 	case mode.View:
 		h.M.Tab.MoveLeft()
@@ -22,7 +22,7 @@ func (h *CommandHandler) MoveLeft(...string) {
 	}
 }
 
-func (h *CommandHandler) MoveRight(...string) {
+func (h *CommandHandler) TabMoveRight(...string) {
 	switch mode.Current() {
 	case mode.View:
 		h.M.Tab.MoveRight()
@@ -32,12 +32,12 @@ func (h *CommandHandler) MoveRight(...string) {
 	}
 }
 
-func (h *CommandHandler) JumpLineStart(...string) {
+func (h *CommandHandler) TabJumpLineStart(...string) {
 	h.M.Tab.MoveLeft()
 	h.updateCursorSB()
 }
 
-func (h *CommandHandler) JumpLineEnd(...string) {
+func (h *CommandHandler) TabJumpLineEnd(...string) {
 	h.M.Tab.MoveLeft()
 	h.updateCursorSB()
 }

@@ -14,16 +14,18 @@ const keybindsFilename = "keybinds.toml"
 var b Keybinds
 
 type Keybinds struct {
-	View    map[string]string `toml:"view"`
 	Command map[string]string `toml:"command"`
+	Edit    map[string]string `toml:"edit"`
 	Replace map[string]string `toml:"replace"`
+	View    map[string]string `toml:"view"`
 }
 
 func newB() Keybinds {
 	return Keybinds{
-		View:    make(map[string]string),
 		Command: make(map[string]string),
+		Edit:    make(map[string]string),
 		Replace: make(map[string]string),
+		View:    make(map[string]string),
 	}
 }
 
@@ -75,6 +77,10 @@ func CommandFor(m mode.Mode, key string) (string, bool) {
 		}
 	case mode.Replace:
 		if bind, ok := b.Replace[key]; ok {
+			cmd = bind
+		}
+	case mode.Edit:
+		if bind, ok := b.Edit[key]; ok {
 			cmd = bind
 		}
 	default:

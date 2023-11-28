@@ -1,16 +1,24 @@
 [view]
-h = "move_left"
-j = "move_down"
-k = "move_up"
-l = "move_right"
+d = "tab_delete_rune"
+
 ":" = "enter_command_mode"
 esc = "enter_view_mode"
 i = "enter_edit_mode"
-ctrl-h = "jump_line_start"
-ctrl-l = "jump_line_end"
+
+h = "tab_move_left"
+j = "tab_move_down"
+k = "tab_move_up"
+l = "tab_move_right"
+
+ctrl-h = "tab_jump_line_start"
+ctrl-l = "tab_jump_line_end"
 
 [command]
-backspace = "command_remove_rune"
+backspace = "command_delete_rune"
 enter = "command_submit"
 right = "move_right"
 left = "move_left"
+
+[edit]
+esc = "enter_view_mode"
+backspace = "tab_delete_rune"

@@ -6,8 +6,8 @@ import (
 	"github.com/ravsii/minigun/internal/mode"
 )
 
-func (h *CommandHandler) CommandRemoveRune(...string) {
-	h.M.CommandLine.RemoveRune()
+func (h *CommandHandler) CommandDeleteRune(...string) {
+	h.M.CommandLine.DeleteRune()
 	if h.M.CommandLine.Input() == "" {
 		h.changeMode(mode.View)
 	}

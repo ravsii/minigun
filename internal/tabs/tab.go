@@ -4,6 +4,7 @@ import (
 	"io"
 	"math"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/gdamore/tcell/v2"
@@ -218,8 +219,47 @@ func (t *Tab) Path() string {
 	return t.filePath
 }
 
-func (t *Tab) ReplaceSelected(r rune) {
+func (t *Tab) ReplaceRune(r rune) {
 	t.lines[t.cursor.Line][t.cursor.Position] = r
 	// todo: optimize, we need to re-rended only 1 character
 	t.Draw()
+}
+
+func (t *Tab) DeleteRune() {
+	if t.cursor.Line == 0 && t.cursor.Position == 0 {
+		return
+	}
+
+	l := t.cursor.Line
+	if t.cursor.Position == 0 {
+		prvLine := l - 1
+		prvLen := len(t.lines[prvLine])
+		t.lines[prvLine] = append(t.lines[prvLine], t.lines[l]...)
+
+		t.lines = append(t.lines[:l], t.lines[l+1:]...)
+		t.cursor.Line--
+		t.cursor.Position = prvLen
+	} else {
+		t.lines[t.cursor.Line] = slices.Delete(
+			t.lines[t.cursor.Line], t.cursor.Position, t.cursor.Position+1)
+
+		if t.cursor.Position >= len(t.lines[t.cursor.Line]) {
+			t.cursor.Position--
+		}
+	}
+
+	t.Draw()
+}
+
+func (t *Tab) InsertRune(r rune) {
+	t.lines[t.cursor.Line][t.cursor.Position] = r
+	// todo: optimize, we need to re-rended only 1 character
+	t.Draw()
+}
+
+// InsertNewLine is a shortcut for
+//
+//	t.InsertRune('\n')
+func (t *Tab) InsertNewLine() {
+	t.InsertRune('\n')
 }
