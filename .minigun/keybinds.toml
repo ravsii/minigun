@@ -1,8 +1,10 @@
+[global]
+esc = "enter_view_mode"
+":" = "enter_command_mode"
+
 [view]
 d = "tab_delete_rune"
 
-":" = "enter_command_mode"
-esc = "enter_view_mode"
 i = "enter_edit_mode"
 
 h = "tab_move_left"
@@ -20,5 +22,4 @@ right = "move_right"
 left = "move_left"
 
 [edit]
-esc = "enter_view_mode"
 backspace = "tab_delete_rune"

@@ -14,6 +14,8 @@ const keybindsFilename = "keybinds.toml"
 var b Keybinds
 
 type Keybinds struct {
+	Global map[string]string `toml:"global"`
+
 	Command map[string]string `toml:"command"`
 	Edit    map[string]string `toml:"edit"`
 	Replace map[string]string `toml:"replace"`
@@ -22,6 +24,8 @@ type Keybinds struct {
 
 func newB() Keybinds {
 	return Keybinds{
+		Global: make(map[string]string),
+
 		Command: make(map[string]string),
 		Edit:    make(map[string]string),
 		Replace: make(map[string]string),
@@ -29,19 +33,25 @@ func newB() Keybinds {
 	}
 }
 
-func (c *Keybinds) Merge(new *Keybinds) {
-	if new == nil {
+func (c *Keybinds) Merge(mergeWith *Keybinds) {
+	if mergeWith == nil {
 		return
 	}
 
-	for key, cmd := range new.View {
+	for key, cmd := range mergeWith.Global {
+		c.Global[strings.ToLower(key)] = cmd
+	}
+	for key, cmd := range mergeWith.View {
 		c.View[strings.ToLower(key)] = cmd
 	}
-	for key, cmd := range new.Command {
+	for key, cmd := range mergeWith.Command {
 		c.Command[strings.ToLower(key)] = cmd
 	}
-	for key, cmd := range new.Replace {
+	for key, cmd := range mergeWith.Replace {
 		c.Replace[strings.ToLower(key)] = cmd
+	}
+	for key, cmd := range mergeWith.Edit {
+		c.Edit[strings.ToLower(key)] = cmd
 	}
 }
 
@@ -66,6 +76,11 @@ func Load() error {
 
 func CommandFor(m mode.Mode, key string) (string, bool) {
 	var cmd string
+
+	if bind, ok := b.Global[key]; ok {
+		cmd = bind
+	}
+
 	switch m {
 	case mode.View:
 		if bind, ok := b.View[key]; ok {

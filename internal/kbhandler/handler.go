@@ -92,22 +92,28 @@ func (h *KeybindHandler) handleReplace(event tcell.Event) {
 }
 
 func (h *KeybindHandler) handleEdit(event tcell.Event) {
+	cmd, found := h.cmdFromEvent(event)
+	if found {
+		h.c.CmdExecute(cmd)
+		return
+	}
+
 	key, ok := event.(*tcell.EventKey)
 	if !ok {
 		return
 	}
 
-	for {
-		r := key.Rune()
-		if !unicode.IsGraphic(r) {
-			continue
-		}
-
-		h.c.ReplaceRune(string(r))
-		break
+	if key.Key() == tcell.KeyEnter {
+		h.c.InsertNewLine()
+		return
 	}
 
-	h.c.EnterViewMode()
+	r := key.Rune()
+	if !unicode.IsGraphic(r) {
+		return
+	}
+
+	h.c.InsertRune(r)
 }
 
 func (h *KeybindHandler) cmdFromEvent(e tcell.Event) (string, bool) {

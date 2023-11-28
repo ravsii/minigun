@@ -195,7 +195,6 @@ func (t *Tab) MoveLeft() {
 }
 
 func (t *Tab) MoveRight() {
-	// -1 for \n
 	if t.cursor.Position >= len(t.lines[t.cursor.Line])-1 {
 		return
 	}
@@ -251,15 +250,31 @@ func (t *Tab) DeleteRune() {
 	t.Draw()
 }
 
-func (t *Tab) InsertRune(r rune) {
-	t.lines[t.cursor.Line][t.cursor.Position] = r
-	// todo: optimize, we need to re-rended only 1 character
+func (t *Tab) InsertRune(runes ...rune) {
+	for _, r := range runes {
+		t.insertRune(r)
+	}
+
 	t.Draw()
 }
 
-// InsertNewLine is a shortcut for
-//
-//	t.InsertRune('\n')
+func (t *Tab) insertRune(r rune) {
+	if r == '\n' {
+		t.InsertNewLine()
+		return
+	}
+
+	slices.Insert(t.lines[t.cursor.Line], t.cursor.Position, r)
+	t.cursor.Position++
+	t.Draw()
+}
+
 func (t *Tab) InsertNewLine() {
-	t.InsertRune('\n')
+	splitAt := t.cursor.Position
+	slices.Insert(t.lines, splitAt, t.lines[splitAt])
+	t.lines[t.cursor.Line] = t.lines[t.cursor.Line][:splitAt]
+	t.cursor.Line++
+	t.cursor.Position = 0
+
+	t.Draw()
 }
