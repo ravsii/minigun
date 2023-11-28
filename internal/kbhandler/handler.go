@@ -27,7 +27,6 @@ func New(c *commands.CommandHandler) *KeybindHandler {
 }
 
 func (h *KeybindHandler) Handle(e tcell.Event) {
-
 	switch mode.Current() {
 	case mode.View:
 		h.handleView(e)
@@ -35,6 +34,8 @@ func (h *KeybindHandler) Handle(e tcell.Event) {
 		h.handleCommand(e)
 	case mode.Replace:
 		h.handleReplace(e)
+	case mode.Edit:
+		h.handleEdit(e)
 	default:
 		h.c.Info("unknown mode ", mode.Current().String())
 	}
@@ -84,7 +85,25 @@ func (h *KeybindHandler) handleReplace(event tcell.Event) {
 		}
 
 		h.c.ReplaceSelected(string(r))
+		break
+	}
 
+	h.c.EnterViewMode()
+}
+
+func (h *KeybindHandler) handleEdit(event tcell.Event) {
+	key, ok := event.(*tcell.EventKey)
+	if !ok {
+		return
+	}
+
+	for {
+		r := key.Rune()
+		if !unicode.IsGraphic(r) {
+			continue
+		}
+
+		h.c.ReplaceSelected(string(r))
 		break
 	}
 

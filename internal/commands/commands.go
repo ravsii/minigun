@@ -29,9 +29,12 @@ func New(mg *minigun.Minigun) CommandHandler {
 		"command_remove_rune": handler.CommandRemoveRune,
 		"command_submit":      handler.CommandSubmit,
 		"enter_command_mode":  handler.EnterCommandMode,
+		"enter_edit_mode":     handler.EnterEditMode,
 		"enter_replace_mode":  handler.EnterReplaceMode,
 		"enter_view_mode":     handler.EnterViewMode,
 		"execute":             handler.CmdExecute,
+		"jump_line_end":       handler.JumpLineEnd,
+		"jump_line_start":     handler.JumpLineStart,
 		"move_down":           handler.MoveDown,
 		"move_left":           handler.MoveLeft,
 		"move_right":          handler.MoveRight,
@@ -57,7 +60,7 @@ func New(mg *minigun.Minigun) CommandHandler {
 }
 
 // CmdFromString returns cmd from a given (presumably user-inputted) string.
-// Returns nil, false if command is not found.
+// Returns nil, false if a command wasn't found.
 func (h *CommandHandler) CmdFromString(c string) (Cmd, bool) {
 	c = strings.ToLower(c)
 	if alias, exists := h.aliases[c]; exists {
@@ -80,7 +83,11 @@ func (h *CommandHandler) CmdExecute(args ...string) {
 
 	cmd, found := h.CmdFromString(args[0])
 	if !found {
-		h.M.CommandLine.Errorf("unknown command: %s", strings.Join(args, " "))
+		badCmd := args[0]
+		if len(args) > 1 {
+			badCmd += "(" + strings.Join(args[1:], " ") + ")"
+		}
+		h.M.CommandLine.Errorf("unknown command: %s", badCmd)
 		return
 	}
 

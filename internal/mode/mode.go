@@ -6,12 +6,14 @@ const (
 	View Mode = iota
 	Command
 	Replace
+	Edit
 )
 
 var modeString = map[Mode]string{
 	View:    "View",
 	Command: "Console",
 	Replace: "Replace",
+	Edit:    "Edit",
 }
 
 var current = View

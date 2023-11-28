@@ -4,9 +4,12 @@ j = "move_down"
 k = "move_up"
 l = "move_right"
 ":" = "enter_command_mode"
+esc = "enter_view_mode"
+i = "enter_edit_mode"
+ctrl-h = "jump_line_start"
+ctrl-l = "jump_line_end"
 
 [command]
-esc = "enter_view_mode"
 backspace = "command_remove_rune"
 enter = "command_submit"
 right = "move_right"

@@ -21,6 +21,10 @@ func (h *CommandHandler) EnterReplaceMode(...string) {
 	h.changeMode(mode.Replace)
 }
 
+func (h *CommandHandler) EnterEditMode(...string) {
+	h.changeMode(mode.Edit)
+}
+
 func (h *CommandHandler) changeMode(m mode.Mode) {
 	mode.Set(m)
 	h.M.StatusBar.Draw()
