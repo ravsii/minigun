@@ -1,6 +1,10 @@
 package commands
 
-import "github.com/ravsii/minigun/internal/mode"
+import (
+	"strings"
+
+	"github.com/ravsii/minigun/internal/mode"
+)
 
 func (h *CommandHandler) CommandRemoveRune(...string) {
 	h.M.CommandLine.RemoveRune()
@@ -10,13 +14,15 @@ func (h *CommandHandler) CommandRemoveRune(...string) {
 }
 
 func (h *CommandHandler) CommandSubmit(...string) {
-	cmd := h.M.CommandLine.Input()
-	if cmd == "" {
+	input := h.M.CommandLine.Input()
+	if input == "" {
 		h.changeMode(mode.View)
 		return
 	}
 
+	cmdWithArgs := strings.Fields(input)
+
 	h.M.CommandLine.Reset()
-	h.CmdExecute(cmd)
+	h.CmdExecute(cmdWithArgs...)
 	h.changeMode(mode.View)
 }

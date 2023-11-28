@@ -14,7 +14,7 @@ func (h *CommandHandler) OpenFile(filePaths ...string) {
 	}
 
 	if err := h.M.Tab.FromPath(filePaths[0]); err != nil {
-		h.M.CommandLine.Errorf("can't open %s: %s", filePaths[0], err)
+		h.M.CommandLine.Error(err.Error())
 		return
 	}
 

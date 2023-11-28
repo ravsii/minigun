@@ -36,6 +36,7 @@ func (h *CommandHandler) JumpLineStart(...string) {
 	h.M.Tab.MoveLeft()
 	h.updateCursorSB()
 }
+
 func (h *CommandHandler) JumpLineEnd(...string) {
 	h.M.Tab.MoveLeft()
 	h.updateCursorSB()
